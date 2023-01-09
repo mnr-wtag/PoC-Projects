@@ -1,0 +1,11 @@
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\bin\Debug\SimpleHeartbeatService.exe.config
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\bin\Debug\SimpleHeartbeatService.exe
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\bin\Debug\SimpleHeartbeatService.pdb
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\bin\Debug\Topshelf.dll
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\bin\Debug\Topshelf.xml
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\obj\Debug\SimpleHeartbeatService.csproj.AssemblyReference.cache
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\obj\Debug\SimpleHeartbeatService.csproj.SuggestedBindingRedirects.cache
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\obj\Debug\SimpleHeartbeatService.csproj.CoreCompileInputs.cache
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\obj\Debug\SimpleHeartbeatService.csproj.CopyComplete
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\obj\Debug\SimpleHeartbeatService.exe
+C:\Users\Welldev\source\repos\SimpleHeartbeatService\SimpleHeartbeatService\obj\Debug\SimpleHeartbeatService.pdb
