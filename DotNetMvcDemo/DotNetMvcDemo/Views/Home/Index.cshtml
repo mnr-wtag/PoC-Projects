@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Manage Courses</h2>
+
+        <p>  @Html.ActionLink("Courses", "Index", "Courses", null, new { @class = "btn btn-default" })</p>
+      
+    </div>
+    <div class="col-md-4">
+        <h2>Manage student</h2>
+        <p>  @Html.ActionLink("Students", "Index", "Students", null, new { @class = "btn btn-default" })</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Manage Department</h2>
+        <p>  @Html.ActionLink("Department", "Index", "Departments", null, new { @class = "btn btn-default" })</p>
+    </div>
+</div>
