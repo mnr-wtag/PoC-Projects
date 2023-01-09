@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TakeNote.ViewModels"
+             x:Class="TakeNote.MainPage">
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="5*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Source="scene" Background="Black" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="2" />
+            <Label Grid.Row="2" Grid.Column="0" Text="Note Title:" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" />
+            <Editor Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4" Placeholder="Type Title" Text="{Binding Title}" />
+            <Editor Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="5" Placeholder="Type the note here" Text="{Binding Note}}" />
+            <Button Text="Save Note" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Command="{Binding SaveCommand}" />
+            <Button Text="Erase" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Command="{Binding EraseCommand}" />
+            <Label Grid.Row="6" Grid.ColumnSpan="5" Text="{Binding Error}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            <ScrollView Grid.Row="5" Grid.Column="0"  Grid.ColumnSpan="5" Orientation="Vertical" VerticalScrollBarVisibility="Always">
+                <CollectionView ItemsSource="{Binding AllNotes}" BackgroundColor="Transparent" >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <Frame  BackgroundColor="Transparent">
+                                    <Label Text="{Binding .}" TextColor="#FFFFFF" FontSize="12" />
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+        </Grid>
+    </StackLayout>
+
+</ContentPage>
