@@ -102,7 +102,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RestApiNetDemo.BLL\RestApiNetDemo.BLL.csproj">
+      <Project>{86d5ba92-1cc1-492e-b818-07e6928e1567}</Project>
+      <Name>RestApiNetDemo.BLL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
