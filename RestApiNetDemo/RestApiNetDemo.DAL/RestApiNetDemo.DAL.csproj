@@ -31,8 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,7 +50,83 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Admin.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\AuthUser.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Cours.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\C__MigrationHistory.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Department.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EmailAddress.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Enrollment.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\MobileNumber.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Student.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Teacher.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\UMSModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UMSModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\UMSModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\UMSModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UMSModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\UserProfile.cs">
+      <DependentUpon>UMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Data\UMSModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>UMSModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Data\UMSModel.edmx.diagram">
+      <DependentUpon>UMSModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\UMSModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UMSModel.Context.cs</LastGenOutput>
+      <DependentUpon>UMSModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Data\UMSModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>UMSModel.edmx</DependentUpon>
+      <LastGenOutput>UMSModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
