@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccessFactory.cs" />
     <Compile Include="Data\Admin.cs">
       <DependentUpon>UMSModel.tt</DependentUpon>
     </Compile>
@@ -98,7 +99,13 @@
     <Compile Include="Data\UserProfile.cs">
       <DependentUpon>UMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="IRepositories\IAuth.cs" />
+    <Compile Include="IRepositories\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AdminRepo.cs" />
+    <Compile Include="Repositories\CourseRepo.cs" />
+    <Compile Include="Repositories\StudentRepo.cs" />
+    <Compile Include="Repositories\TeacherRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Data\UMSModel.edmx">
@@ -128,5 +135,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
