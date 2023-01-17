@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections;
-using DotNetMvcDemo.Controllers;
+﻿using DotNetMvcDemo.Controllers;
 using DotNetMvcDemo.Models;
-using DotNetMvcDemo.ViewModels;
+using DotNetMvcDemo.Repository;
+using DotNetMvcDemo.Services;
 using DotNetMvcDemo.ViewModels.Department;
+using FluentAssertions;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web.Mvc;
-using DotNetMvcDemo.Repository;
-using DotNetMvcDemo.Services;
-using FluentAssertions;
 using Xunit;
 
 namespace DotNetMvcDemoTests.Controllers
@@ -23,11 +19,11 @@ namespace DotNetMvcDemoTests.Controllers
         public readonly DepartmentService deptService;
         public DepartmentControllerTest()
         {
-                deptService = new DepartmentService(mock.Object);
+            deptService = new DepartmentService(mock.Object);
         }
         private static List<Department> GetTestDepartments()
         {
-            var mockDepartments = new List<Department>
+            List<Department> mockDepartments = new List<Department>
             {
                 new Department
                 {
@@ -55,10 +51,10 @@ namespace DotNetMvcDemoTests.Controllers
         public void Can_Get_Department()
         {
             //Arrange
-            var departmentId = 2;
-            var departmentName = "CS";
-            var departmentDescription = "Computer Science";
-            var mockData = new Department
+            int departmentId = 2;
+            string departmentName = "CS";
+            string departmentDescription = "Computer Science";
+            Department mockData = new Department
             {
                 Id = departmentId,
                 Name = departmentName,
@@ -67,7 +63,7 @@ namespace DotNetMvcDemoTests.Controllers
 
             mock.Setup(x => x.GetById(a => a.Id == departmentId, null)).Returns(mockData);
 
-            var expectedData = deptService.GetDepartmentById(2);
+            DepartmentViewModel expectedData = deptService.GetDepartmentById(2);
 
             //Assertion
             Assert.Equal(expectedData.Name, departmentName);
@@ -82,8 +78,8 @@ namespace DotNetMvcDemoTests.Controllers
         [Fact]
         public void Index_ActionExecutes_ReturnsViewForIndex()
         {
-            var controller = new DepartmentsController();
-            var result = controller.Index();
+            DepartmentsController controller = new DepartmentsController();
+            ActionResult result = controller.Index();
             Assert.IsType<ViewResult>(result);
         }
 
@@ -92,7 +88,7 @@ namespace DotNetMvcDemoTests.Controllers
         {
             //Arrange
 
-            var mockData = new List<Department>
+            List<Department> mockData = new List<Department>
             {
                 new Department { Name = "CS" },
                 new Department { Name = "EEE" }
@@ -101,10 +97,10 @@ namespace DotNetMvcDemoTests.Controllers
                                                                 .Returns(mockData);
 
             //Act
-           
-            var service = new DepartmentService(mock.Object);
-            var expectedData = service.GetDepartmentList().ToList();
-            
+
+            DepartmentService service = new DepartmentService(mock.Object);
+            List<DepartmentViewModel> expectedData = service.GetDepartmentList().ToList();
+
             //Assertion
 
             Assert.Equal(expectedData.Count, mockData.Count);
@@ -115,15 +111,15 @@ namespace DotNetMvcDemoTests.Controllers
         [Fact]
         public void Create_InvalidModelState_ReturnsView()
         {
-            var _controller = new DepartmentsController();
+            DepartmentsController _controller = new DepartmentsController();
             _controller.ModelState.AddModelError("Name", @"Name is required");
 
-            var dept = new CreateDepartmentViewModel { Description = "error khao" };
+            CreateDepartmentViewModel dept = new CreateDepartmentViewModel { Description = "error khao" };
 
-            var result = _controller.Create(dept);
+            ActionResult result = _controller.Create(dept);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var testDept = Assert.IsType<CreateDepartmentViewModel>(viewResult.Model);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            CreateDepartmentViewModel testDept = Assert.IsType<CreateDepartmentViewModel>(viewResult.Model);
 
             Assert.Equal(dept.Description, testDept.Description);
 
@@ -132,10 +128,10 @@ namespace DotNetMvcDemoTests.Controllers
         [Fact]
         public void Create_InvalidModelState_CreateDepartmentNeverExecutes()
         {
-            var _controller = new DepartmentsController();
+            DepartmentsController _controller = new DepartmentsController();
             _controller.ModelState.AddModelError("Name", "Name is required");
 
-            var dept = new CreateDepartmentViewModel { Description = "error khao" };
+            CreateDepartmentViewModel dept = new CreateDepartmentViewModel { Description = "error khao" };
 
             _controller.Create(dept);
 
@@ -146,7 +142,7 @@ namespace DotNetMvcDemoTests.Controllers
         public void Dummy_Test()
         {
             //Arrange
-            var myTestString = "Hello, this is a test string";
+            string myTestString = "Hello, this is a test string";
 
             //Act
             myTestString.Should().StartWith("He").And.EndWith("g").And.HaveLength(28);
@@ -160,13 +156,13 @@ namespace DotNetMvcDemoTests.Controllers
         [Fact]
         public void String_Assertion_Demo()
         {
-            var myTestString = "hello, world";
-            var stringSimilarToMyTestString = "HELLO, WORLD";
-            var myEmptyString = "";
+            string myTestString = "hello, world";
+            string stringSimilarToMyTestString = "HELLO, WORLD";
+            string myEmptyString = "";
             string myNullString = null;
 
             myTestString.Should().Be("hello, world");
-            myTestString.Should().BeEquivalentTo(stringSimilarToMyTestString );
+            myTestString.Should().BeEquivalentTo(stringSimilarToMyTestString);
             myNullString.Should().BeNull();
             myEmptyString.Should().BeEmpty();
             myEmptyString.Should().BeNullOrEmpty();
@@ -177,13 +173,13 @@ namespace DotNetMvcDemoTests.Controllers
         [Fact]
         public void Regex_Test()
         {
-            var myTestString = "Hello, this is a test string";
-            var myDateString = "05/30/2022";
+            string myTestString = "Hello, this is a test string";
+            string myDateString = "05/30/2022";
 
             myTestString.Should().MatchEquivalentOf("HElLo, this is a * string");
             myDateString.Should().MatchRegex("\\d{1,2}\\/\\d{1,2}\\/\\d{4}");
         }
 
-        
+
     }
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using DotNetMvcDemo.Data;
-using DotNetMvcDemo.Models;
+﻿using DotNetMvcDemo.Models;
+using DotNetMvcDemo.Services;
 using DotNetMvcDemo.ViewModels.Auth;
-using System.Linq;
+using System;
 using System.Web.Mvc;
 using System.Web.Security;
-using DotNetMvcDemo.Services;
-using Microsoft.Win32;
 
 namespace DotNetMvcDemo.Controllers
 {
@@ -20,8 +17,8 @@ namespace DotNetMvcDemo.Controllers
         [HttpPost]
         public ActionResult Signup(RegisterViewModel registerView)
         {
-            var service = new AuthService();
-            var response = service.SignupService(registerView);
+            AuthService service = new AuthService();
+            Helpers.ServiceResponse response = service.SignupService(registerView);
             if (response == null) return View();
             ViewBag.Message = response.Message;
             ViewBag.Response = response.Response;
@@ -35,7 +32,7 @@ namespace DotNetMvcDemo.Controllers
                     return View(registerView);
                 case Helpers.Response.Exists:
                     return View(registerView);
-                case Helpers.Response.NotFound :
+                case Helpers.Response.NotFound:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -45,33 +42,29 @@ namespace DotNetMvcDemo.Controllers
 
         public ActionResult Login()
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return View();
+            return HttpContext.User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (ActionResult)View();
         }
 
         [HttpPost]
         public ActionResult Login(AuthUser authUser)
         {
-            
-            var service = new AuthService();
-            var response = service.LoginService(authUser);
+
+            AuthService service = new AuthService();
+            Helpers.ServiceResponse response = service.LoginService(authUser);
             if (response == null) return View();
             ViewBag.Message = response.Message;
             ViewBag.Response = response.Response;
             switch (response.Response)
             {
                 case Helpers.Response.Success:
-                    return RedirectToAction("Index","Home", new { response.Message });
+                    return RedirectToAction("Index", "Home", new { response.Message });
                 case Helpers.Response.BadRequest:
                     break;
                 case Helpers.Response.Error:
                     return View(authUser);
                 case Helpers.Response.Exists:
                     return View(authUser);
-                case Helpers.Response.NotFound :
+                case Helpers.Response.NotFound:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

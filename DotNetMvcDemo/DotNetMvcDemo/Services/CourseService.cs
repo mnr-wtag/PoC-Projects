@@ -29,12 +29,12 @@ namespace DotNetMvcDemo.Services
         public IEnumerable<CourseViewModel> GetCourseList()
         {
 
-            var courses = _repository.GetAll();
-            var coursesViewList = new List<CourseViewModel>();
+            IEnumerable<Course> courses = _repository.GetAll();
+            List<CourseViewModel> coursesViewList = new List<CourseViewModel>();
 
-            foreach (var course in courses)
+            foreach (Course course in courses)
             {
-                var courseView = new CourseViewModel();
+                CourseViewModel courseView = new CourseViewModel();
                 courseView.Id = course.Id;
                 courseView.Name = course.Name;
                 courseView.Credit = course.Credit;
@@ -46,10 +46,10 @@ namespace DotNetMvcDemo.Services
 
         public CourseDetailsViewModel GetCourseById(int? id)
         {
-            var course = _repository.GetById(x => x.Id == id, new List<string> { "Enrollment" });
+            Course course = _repository.GetById(x => x.Id == id, new List<string> { "Enrollment" });
             if (course == null) return null;
 
-            var courseView = new CourseDetailsViewModel();
+            CourseDetailsViewModel courseView = new CourseDetailsViewModel();
             courseView.Id = course.Id;
             courseView.Name = course.Name;
             courseView.Enrollments = course.Enrollments;
@@ -65,7 +65,7 @@ namespace DotNetMvcDemo.Services
         {
             try
             {
-                var course = new Course();
+                Course course = new Course();
                 course.Name = viewModel.Name;
                 course.Credit = viewModel.Credit;
                 course.CreatedAt = DateTime.Now;
@@ -93,7 +93,7 @@ namespace DotNetMvcDemo.Services
         public bool UpdateCourse(CourseViewModel viewModel)
         {
             if (viewModel == null) return false;
-            var model = _repository.GetById(x => x.Id == viewModel.Id);
+            Course model = _repository.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Name = viewModel.Name;
             model.Credit = viewModel.Credit;
@@ -109,7 +109,7 @@ namespace DotNetMvcDemo.Services
 
         public bool DeleteCourse(int? id)
         {
-            var course = _repository.GetById(x => x.Id == id);
+            Course course = _repository.GetById(x => x.Id == id);
 
             if (course == null) return false;
             _repository.Delete(course);

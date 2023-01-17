@@ -37,7 +37,7 @@ namespace DotNetMvcDemo.Repository
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> includes = null)
         {
-            var query = Table;
+            IQueryable<T> query = Table;
 
             if (expression != null)
             {
@@ -54,13 +54,13 @@ namespace DotNetMvcDemo.Repository
                 query = orderBy(query);
             }
 
-            var data = query.ToList();
+            List<T> data = query.ToList();
             return data;
         }
 
         public virtual T GetById(Expression<Func<T, bool>> expression, List<string> includes = null)
         {
-            var query = Table;
+            IQueryable<T> query = Table;
             if (expression != null)
             {
                 query = query.Where(expression);
@@ -71,7 +71,7 @@ namespace DotNetMvcDemo.Repository
                 query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
             }
 
-            var data = query.FirstOrDefault();
+            T data = query.FirstOrDefault();
             return data;
         }
 
@@ -153,9 +153,9 @@ namespace DotNetMvcDemo.Repository
 
         public void ManageException(DbEntityValidationException dbEx)
         {
-            foreach (var validationErrors in dbEx.EntityValidationErrors)
+            foreach (DbEntityValidationResult validationErrors in dbEx.EntityValidationErrors)
             {
-                foreach (var validationError in validationErrors.ValidationErrors)
+                foreach (DbValidationError validationError in validationErrors.ValidationErrors)
                 {
                     _errorMessage += Environment.NewLine +
                                      $"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}";

@@ -1,15 +1,4 @@
-﻿using DotNetMvcDemo.Controllers;
-using DotNetMvcDemo.Models;
-using DotNetMvcDemo.Repository;
-using DotNetMvcDemo.Services;
-using Moq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using DotNetMvcDemo.ViewModels.Employee.Admin;
-using Xunit;
-
-namespace DotNetMvcDemoTests.Controllers
+﻿namespace DotNetMvcDemoTests.Controllers
 {
     //public class AdminControllerTest
     //{
@@ -19,7 +8,7 @@ namespace DotNetMvcDemoTests.Controllers
     //    {
     //            adminService = new AdminService(mock.Object);
     //    }
-     
+
 
     //    [Fact]
     //    public void Can_Get_Admin()
@@ -28,7 +17,7 @@ namespace DotNetMvcDemoTests.Controllers
     //        var adminId = 2;
     //        var adminFirstName = "DemoFrist";
     //        var adminLastName = "demoLast";
-            
+
     //        var mockData = new Admin
     //        {
     //            Id = adminId,
@@ -72,10 +61,10 @@ namespace DotNetMvcDemoTests.Controllers
     //                                                            .Returns(mockData);
 
     //        //Act
-           
+
     //        var service = new AdminService(mock.Object);
     //        var expectedData = service.GetAdminList().ToList();
-            
+
     //        //Assertion
 
     //        Assert.Equal(expectedData.Count, mockData.Count);

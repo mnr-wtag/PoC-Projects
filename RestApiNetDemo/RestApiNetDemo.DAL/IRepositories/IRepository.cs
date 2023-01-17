@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace RestApiNetDemo.DAL.IRepositories
 {
@@ -18,6 +19,12 @@ namespace RestApiNetDemo.DAL.IRepositories
         bool Delete(TId entity);
         bool Update(T entity);
         T GetById(TId id);
+        List<T> GetAll();
+    }
+
+    public interface IRepository<T>
+    {
+        bool Add(T entity);
         List<T> GetAll();
     }
 }

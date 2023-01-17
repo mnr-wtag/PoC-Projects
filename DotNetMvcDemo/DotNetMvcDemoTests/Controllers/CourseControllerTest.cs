@@ -1,10 +1,10 @@
-﻿using System;
-using DotNetMvcDemo.Controllers;
+﻿using DotNetMvcDemo.Controllers;
 using DotNetMvcDemo.Models;
 using DotNetMvcDemo.Repository;
 using DotNetMvcDemo.Services;
 using DotNetMvcDemo.ViewModels.Course;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -21,22 +21,22 @@ namespace DotNetMvcDemoTests.Controllers
         {
             courseService = new CourseService(mock.Object);
         }
-       
+
 
         [Fact]
         public void Can_Get_Course()
         {
             //Arrange
-            var courseId = 2;
+            int courseId = 2;
 
-            var courseName = "Test Course";
-            var courseCredit = 3;
-            var courseDepartmentId = 1;
-            var courseCreatedAt = DateTime.Now;
-            var courseCreatedBy = 1;
-            var courseUpdatedAt = DateTime.Now;
-            var courseUpdatedBy = 1;
-            var mockData = new Course
+            string courseName = "Test Course";
+            int courseCredit = 3;
+            int courseDepartmentId = 1;
+            DateTime courseCreatedAt = DateTime.Now;
+            int courseCreatedBy = 1;
+            DateTime courseUpdatedAt = DateTime.Now;
+            int courseUpdatedBy = 1;
+            Course mockData = new Course
             {
                 Id = courseId,
                 Name = courseName,
@@ -47,22 +47,22 @@ namespace DotNetMvcDemoTests.Controllers
                 UpdatedAt = courseUpdatedAt,
                 UpdatedBy = courseUpdatedBy,
             };
-            
-            mock.Setup(x => x.GetById(a=>a.Id==courseId, null)).Returns(mockData);
+
+            mock.Setup(x => x.GetById(a => a.Id == courseId, null)).Returns(mockData);
 
             //Act
-            var expectedData = courseService.GetCourseById(2);
-            
+            CourseDetailsViewModel expectedData = courseService.GetCourseById(2);
+
             //Assertion
             Assert.Equal(expectedData.Name, courseName);
-            Assert.Equal(expectedData.Credit,courseCredit);
+            Assert.Equal(expectedData.Credit, courseCredit);
         }
 
 
         [Fact]
         public void Index_ActionExecutes_ReturnsViewForIndex()
         {
-            var result = _controller.Index() ;
+            ActionResult result = _controller.Index();
             Assert.IsType<ViewResult>(result);
         }
 
@@ -70,8 +70,8 @@ namespace DotNetMvcDemoTests.Controllers
         public void Can_Get_Course_List()
         {
             //Arrange
-           
-            var mockData = new List<Course>
+
+            List<Course> mockData = new List<Course>
             {
                 new Course { Name = "Demo1" },
                 new Course { Name = "Demo2" }
@@ -80,9 +80,9 @@ namespace DotNetMvcDemoTests.Controllers
                                                                 .Returns(mockData);
 
             //Act
-           
-            var expectedData = courseService.GetCourseList().ToList();
-           
+
+            List<CourseViewModel> expectedData = courseService.GetCourseList().ToList();
+
             //Assertion
 
             Assert.Equal(expectedData.Count, mockData.Count);
@@ -95,12 +95,12 @@ namespace DotNetMvcDemoTests.Controllers
         {
             _controller.ModelState.AddModelError("Name", @"Name is required");
 
-            var course = new CreateCourseViewModel { Credit = 3 };
+            CreateCourseViewModel course = new CreateCourseViewModel { Credit = 3 };
 
-            var result = _controller.Create(course);
+            ActionResult result = _controller.Create(course);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var testDept = Assert.IsType<CreateCourseViewModel>(viewResult.Model);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            CreateCourseViewModel testDept = Assert.IsType<CreateCourseViewModel>(viewResult.Model);
 
             Assert.Equal(course.Credit, testDept.Credit);
 
@@ -111,7 +111,7 @@ namespace DotNetMvcDemoTests.Controllers
         {
             _controller.ModelState.AddModelError("Name", @"Name is required");
 
-            var course = new CreateCourseViewModel { Credit = 3 };
+            CreateCourseViewModel course = new CreateCourseViewModel { Credit = 3 };
 
             _controller.Create(course);
 
@@ -119,6 +119,6 @@ namespace DotNetMvcDemoTests.Controllers
         }
 
 
-        
+
     }
 }

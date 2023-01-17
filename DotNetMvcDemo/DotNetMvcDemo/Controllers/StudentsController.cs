@@ -26,8 +26,8 @@ namespace DotNetMvcDemo.Controllers
 
         public ActionResult Index()
         {
-            var service = new StudentService();
-            var data = service.GetStudentList();
+            StudentService service = new StudentService();
+            System.Collections.Generic.IEnumerable<StudentViewModel> data = service.GetStudentList();
             if (data != null)
             {
                 data = data.ToList();
@@ -40,8 +40,8 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var service = new StudentService();
-            var data = service.GetStudentById(id);
+            StudentService service = new StudentService();
+            StudentDetailsViewModel data = service.GetStudentById(id);
             return data == null ? HttpNotFound() : (ActionResult)View(data);
         }
 
@@ -56,7 +56,7 @@ namespace DotNetMvcDemo.Controllers
         {
             if (model.DepartmentId != 0)
             {
-                var courses = _courseRepository.GetAll(x => x.DepartmentId == model.DepartmentId);
+                System.Collections.Generic.IEnumerable<Course> courses = _courseRepository.GetAll(x => x.DepartmentId == model.DepartmentId);
                 model.CourseList = new SelectList(courses, "Id", "Name");
             }
             else
@@ -68,7 +68,7 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Create(int? id)
         {
             ViewBag.DepartmentId = new SelectList(_deptRepository.GetAll(), "Id", "Name");
-            var viewModel = new CreateStudentViewModel();
+            CreateStudentViewModel viewModel = new CreateStudentViewModel();
             ConfigureViewModel(viewModel);
             return View(viewModel);
         }
@@ -80,8 +80,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = new StudentService();
-                var result = service.AddNewStudent(createStudentViewModel);
+                StudentService service = new StudentService();
+                Helpers.ServiceResponse result = service.AddNewStudent(createStudentViewModel);
                 if (result.Response == Helpers.Response.Success) return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(_deptRepository.GetAll(), "Id", "Name");
@@ -93,10 +93,10 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var student = _repository.GetById(x => x.Id == id);
+            Student student = _repository.GetById(x => x.Id == id);
             if (student == null) return HttpNotFound();
 
-            var viewModel = new StudentViewModel();
+            StudentViewModel viewModel = new StudentViewModel();
             viewModel.Id = student.Id;
             viewModel.FirstName = student.FirstName;
             viewModel.MiddleName = student.MiddleName;
@@ -115,8 +115,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (!ModelState.IsValid) return View(viewModel);
 
-            var service = new StudentService();
-            var result = service.UpdateDepartment(viewModel);
+            StudentService service = new StudentService();
+            bool result = service.UpdateDepartment(viewModel);
             return result ? RedirectToAction("Index") : (ActionResult)View(viewModel);
         }
 
@@ -124,8 +124,8 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var service = new StudentService();
-            var result = service.DeleteStudent(id);
+            StudentService service = new StudentService();
+            bool result = service.DeleteStudent(id);
 
             return result == false ? HttpNotFound() : (ActionResult)RedirectToAction("Index");
         }

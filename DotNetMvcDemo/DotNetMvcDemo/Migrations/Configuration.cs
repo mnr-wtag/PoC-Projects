@@ -20,7 +20,7 @@ namespace DotNetMvcDemo.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
-            var authUser = new AuthUser
+            AuthUser authUser = new AuthUser
             {
                 UserName = "admin",
                 Password = "admin",
@@ -29,41 +29,25 @@ namespace DotNetMvcDemo.Migrations
                 UpdatedAt = DateTime.Now
             };
             context.AuthUsers.AddOrUpdate(authUser);
+            context.SaveChanges();
 
-            var departmentList = new List<Department>
+            List<Department> departmentList = new List<Department>
             {
                 new Department
                 {
-                    Name = "CS",
-                    Description = "Computer Science",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
-                    Students = null,
-                    Teachers = null,
-                    Admins = null
-                },
+                    Name = "CS", Description = "Computer Science", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Students = null, Teachers = null, Admins = null,CreatedBy=1,UpdatedBy=1},
                 new Department
-                {
-                    Name = "EEE",
-                    Description = "Electrical and Electronics Engineering",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
-                    Students = null,
-                    Teachers = null,
-                    Admins = null
-                }
+                {Name = "EEE", Description = "Electrical and Electronics Engineering", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now, Students = null, Teachers = null, Admins = null,CreatedBy=1,UpdatedBy=1}
             };
 
-            foreach (var department in departmentList)
+            foreach (Department department in departmentList)
             {
                 context.Departments.AddOrUpdate(department);
+                context.SaveChanges();
             }
 
-            var studentList = new List<Student>
+
+            List<Student> studentList = new List<Student>
             {
                 new Student
                 {
@@ -72,18 +56,18 @@ namespace DotNetMvcDemo.Migrations
                     DepartmentId = 1,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
+                    CreatedBy=1,UpdatedBy=1,
                     EnrollmentDate = DateTime.Now,
                 }
             };
-            foreach (var student in studentList)
+            foreach (Student student in studentList)
             {
                 context.Students.AddOrUpdate(student);
+                context.SaveChanges();
             }
 
 
-            var courseList = new List<Course>()
+            List<Course> courseList = new List<Course>()
             {
                 new Course
                 {
@@ -92,8 +76,7 @@ namespace DotNetMvcDemo.Migrations
                     DepartmentId = 1,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
+                    CreatedBy=1,UpdatedBy=1
                 },
                 new Course
                 {
@@ -102,8 +85,7 @@ namespace DotNetMvcDemo.Migrations
                     DepartmentId = 1,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
+                    CreatedBy=1,UpdatedBy=1
                 },
                 new Course
                 {
@@ -112,8 +94,7 @@ namespace DotNetMvcDemo.Migrations
                     DepartmentId = 1,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
+                    CreatedBy=1,UpdatedBy=1
                 },
                 new Course
                 {
@@ -122,8 +103,7 @@ namespace DotNetMvcDemo.Migrations
                     DepartmentId = 2,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
+                    CreatedBy=1,UpdatedBy=1
                 },
                 new Course
                 {
@@ -132,13 +112,13 @@ namespace DotNetMvcDemo.Migrations
                     DepartmentId = 2,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    CreatedBy = 1,
-                    UpdatedBy = 1,
+                    CreatedBy=1,UpdatedBy=1
                 },
             };
-            foreach (var course in courseList)
+            foreach (Course course in courseList)
             {
                 context.Courses.AddOrUpdate(course);
+                context.SaveChanges();
             }
 
             base.Seed(context);

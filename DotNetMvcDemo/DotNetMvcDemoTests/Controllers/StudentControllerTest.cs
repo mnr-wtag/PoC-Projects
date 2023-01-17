@@ -1,15 +1,4 @@
-﻿using DotNetMvcDemo.Controllers;
-using DotNetMvcDemo.Models;
-using DotNetMvcDemo.Repository;
-using DotNetMvcDemo.Services;
-using DotNetMvcDemo.ViewModels.Student;
-using Moq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Xunit;
-
-namespace DotNetMvcDemoTests.Controllers
+﻿namespace DotNetMvcDemoTests.Controllers
 {
     //public class StudentControllerTest
     //{

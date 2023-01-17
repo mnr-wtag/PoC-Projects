@@ -21,6 +21,7 @@ namespace DotNetMvcDemo.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CourseEnrollDate { get; set; }
 
+        public bool IsActive { get; set; }
 
         public virtual AuthUser UpdaterUser { get; set; }
 

@@ -29,12 +29,12 @@ namespace DotNetMvcDemo.Services
         public IEnumerable<AdminViewModel> GetAdminList()
         {
 
-            var admins = _repository.GetAll(null, null, new List<string> { "Department" });
-            var adminsViewList = new List<AdminViewModel>();
+            IEnumerable<Admin> admins = _repository.GetAll(null, null, new List<string> { "Department" });
+            List<AdminViewModel> adminsViewList = new List<AdminViewModel>();
 
-            foreach (var admin in admins)
+            foreach (Admin admin in admins)
             {
-                var adminView = new AdminViewModel();
+                AdminViewModel adminView = new AdminViewModel();
 
                 adminView.FirstName = admin.FirstName;
 
@@ -50,11 +50,11 @@ namespace DotNetMvcDemo.Services
 
         public AdminDetailsViewModel GetAdminById(int? id)
         {
-            var admin = _repository.GetById(x => x.Id == id, new List<string> { "Department" });
+            Admin admin = _repository.GetById(x => x.Id == id, new List<string> { "Department" });
 
             if (admin == null) return null;
 
-            var adminDetailsView = new AdminDetailsViewModel();
+            AdminDetailsViewModel adminDetailsView = new AdminDetailsViewModel();
 
             adminDetailsView.Id = admin.Id;
             adminDetailsView.FirstName = admin.FirstName;
@@ -73,7 +73,7 @@ namespace DotNetMvcDemo.Services
             try
             {
                 if (viewModel == null) return false;
-                var model = new Admin();
+                Admin model = new Admin();
                 model.FirstName = viewModel.FirstName;
                 model.LastName = viewModel.LastName;
                 model.AdminCardNumber = viewModel.AdminCardNumber;
@@ -101,7 +101,7 @@ namespace DotNetMvcDemo.Services
         public bool UpdateAdmin(AdminViewModel viewModel)
         {
             if (viewModel == null) return false;
-            var model = _repository.GetById(x => x.Id == viewModel.Id);
+            Admin model = _repository.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Id = viewModel.Id;
             model.FirstName = viewModel.FirstName;
@@ -121,7 +121,7 @@ namespace DotNetMvcDemo.Services
         public bool DeleteAdmin(int? id)
         {
 
-            var model = _repository.GetById(x => x.Id == id);
+            Admin model = _repository.GetById(x => x.Id == id);
             if (model == null) return false;
             _repository.Delete(model);
             _unitOfWork.Save();

@@ -32,7 +32,7 @@ namespace DotNetMvcDemoTests
         public void SaveChanges(Department deptToUpdate)
         {
 
-            foreach (var dept in _db)
+            foreach (Department dept in _db)
             {
                 if (dept.Id != deptToUpdate.Id) continue;
                 _db.Remove(dept);

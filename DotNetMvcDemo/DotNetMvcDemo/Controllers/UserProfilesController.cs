@@ -14,7 +14,7 @@ namespace DotNetMvcDemo.Controllers
 
         public ActionResult Index()
         {
-            var userProfiles = _db.UserProfiles.Include(u => u.AuthUser);
+            IQueryable<UserProfile> userProfiles = _db.UserProfiles.Include(u => u.AuthUser);
             return View(userProfiles.ToList());
         }
 
@@ -22,7 +22,7 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var userProfile = _db.UserProfiles.Find(id);
+            UserProfile userProfile = _db.UserProfiles.Find(id);
             return userProfile == null ? HttpNotFound() : (ActionResult)View(userProfile);
         }
 
@@ -53,7 +53,7 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var userProfile = _db.UserProfiles.Find(id);
+            UserProfile userProfile = _db.UserProfiles.Find(id);
             if (userProfile == null) return HttpNotFound();
             ViewBag.Id = new SelectList(_db.AuthUsers, "Id", "UserName", userProfile.Id);
             return View(userProfile);
@@ -79,7 +79,7 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var userProfile = _db.UserProfiles.Find(id);
+            UserProfile userProfile = _db.UserProfiles.Find(id);
             return userProfile == null ? HttpNotFound() : (ActionResult)View(userProfile);
         }
 
@@ -89,7 +89,7 @@ namespace DotNetMvcDemo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var userProfile = _db.UserProfiles.Find(id);
+            UserProfile userProfile = _db.UserProfiles.Find(id);
             _db.UserProfiles.Remove(userProfile);
             _db.SaveChanges();
             return RedirectToAction("Index");

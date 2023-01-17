@@ -29,12 +29,12 @@ namespace DotNetMvcDemo.Services
         public IEnumerable<DepartmentViewModel> GetDepartmentList()
         {
 
-            var departments = _repository.GetAll();
-            var departmentsViewList = new List<DepartmentViewModel>();
+            IEnumerable<Department> departments = _repository.GetAll();
+            List<DepartmentViewModel> departmentsViewList = new List<DepartmentViewModel>();
 
-            foreach (var department in departments)
+            foreach (Department department in departments)
             {
-                var departmentView = new DepartmentViewModel
+                DepartmentViewModel departmentView = new DepartmentViewModel
                 {
                     Id = department.Id,
                     Name = department.Name,
@@ -51,18 +51,18 @@ namespace DotNetMvcDemo.Services
         {
 
             //var department = db.Departments.Find(id);
-            var department = _repository.GetById(x => x.Id == id);
+            Department department = _repository.GetById(x => x.Id == id);
 
             if (department == null) return null;
 
-            var departmentView = new DepartmentDetailsViewModel
+            DepartmentDetailsViewModel departmentView = new DepartmentDetailsViewModel
             {
                 Id = department.Id,
                 Name = department.Name,
                 Description = department.Description
             };
 
-            var departmentTeachers = department.Teachers;
+            ICollection<Teacher> departmentTeachers = department.Teachers;
             if (departmentTeachers != null) departmentView.DepartmentTeachers = departmentTeachers.ToList();
 
             return departmentView;
@@ -71,16 +71,16 @@ namespace DotNetMvcDemo.Services
 
         public DepartmentViewModel GetDepartmentByName(string name)
         {
-            using (var db = new ApplicationDbContext())
+            using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var department = _repository.GetById(x => x.Name.Contains(name));
-                var departmentView = new DepartmentDetailsViewModel();
+                Department department = _repository.GetById(x => x.Name.Contains(name));
+                DepartmentDetailsViewModel departmentView = new DepartmentDetailsViewModel();
                 if (department == null) return null;
 
                 departmentView.Id = department.Id;
                 departmentView.Name = department.Name;
                 departmentView.Description = department.Description;
-                var departmentTeachers = db.Departments.Where(x => x.Id == department.Id).Select(x => x.Teachers)
+                ICollection<Teacher> departmentTeachers = db.Departments.Where(x => x.Id == department.Id).Select(x => x.Teachers)
                     .FirstOrDefault();
                 if (departmentTeachers != null) departmentView.DepartmentTeachers = departmentTeachers.ToList();
 
@@ -92,7 +92,7 @@ namespace DotNetMvcDemo.Services
         {
             try
             {
-                var department = new Department();
+                Department department = new Department();
                 department.Name = viewModel.Name;
                 department.Description = viewModel.Description;
                 department.CreatedAt = DateTime.Now;
@@ -119,7 +119,7 @@ namespace DotNetMvcDemo.Services
         public bool UpdateDepartment(DepartmentViewModel viewModel)
         {
             if (viewModel == null) return false;
-            var model = _repository.GetById(x => x.Id == viewModel.Id);
+            Department model = _repository.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Name = viewModel.Name;
             model.Description = viewModel.Description;
@@ -134,7 +134,7 @@ namespace DotNetMvcDemo.Services
 
         public bool DeleteDepartment(int? id)
         {
-            var department = _repository.GetById(x => x.Id == id);
+            Department department = _repository.GetById(x => x.Id == id);
 
             if (department == null) return false;
             _repository.Delete(department);
