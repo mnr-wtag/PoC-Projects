@@ -28,15 +28,15 @@ namespace DotNetMvcDemo.Services
         }
         public ServiceResponse SignupService(RegisterViewModel registerView)
         {
-            var response = new ServiceResponse();
-            var user = new AuthUser
+            ServiceResponse response = new ServiceResponse();
+            AuthUser user = new AuthUser
             {
                 UserName = registerView.UserName,
                 Password = registerView.Password,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
             };
-            var isUserAlreadyExists = !_repository.GetAll(x => x.UserName == user.UserName).IsNullOrEmpty();
+            bool isUserAlreadyExists = !_repository.GetAll(x => x.UserName == user.UserName).IsNullOrEmpty();
             if (!registerView.Password.Equals(registerView.ConfirmPassword))
             {
                 response.Response = Response.Error;
@@ -59,9 +59,9 @@ namespace DotNetMvcDemo.Services
 
         public ServiceResponse LoginService(AuthUser authUser)
         {
-            var response = new ServiceResponse();
+            ServiceResponse response = new ServiceResponse();
 
-            var isValidUser = !_repository.GetAll(user => user.UserName.Equals( authUser.UserName, StringComparison.CurrentCultureIgnoreCase) && user.Password == authUser.Password).IsNullOrEmpty();
+            bool isValidUser = !_repository.GetAll(user => user.UserName.Equals(authUser.UserName, StringComparison.CurrentCultureIgnoreCase) && user.Password == authUser.Password).IsNullOrEmpty();
             if (isValidUser)
             {
                 FormsAuthentication.SetAuthCookie(authUser.UserName, false);

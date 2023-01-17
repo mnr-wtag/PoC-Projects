@@ -1,15 +1,4 @@
-﻿using DotNetMvcDemo.Controllers;
-using DotNetMvcDemo.Models;
-using DotNetMvcDemo.Repository;
-using DotNetMvcDemo.Services;
-using Moq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using DotNetMvcDemo.ViewModels.Employee.Teacher;
-using Xunit;
-
-namespace DotNetMvcDemoTests.Controllers
+﻿namespace DotNetMvcDemoTests.Controllers
 {
     //public class TeacherControllerTest
     //{
@@ -19,7 +8,7 @@ namespace DotNetMvcDemoTests.Controllers
     //    {
     //            teacherService = new TeacherService(mock.Object);
     //    }
-        
+
     //    [Fact]
     //    public void Can_Get_Teacher()
     //    {
@@ -27,7 +16,7 @@ namespace DotNetMvcDemoTests.Controllers
     //        var teacherId = 2;
     //        var teacherFirstName = "First";
     //        var teacherLastName = "Last";
-            
+
     //        var mockData = new Teacher
     //        {
     //            Id = teacherId,
@@ -71,10 +60,10 @@ namespace DotNetMvcDemoTests.Controllers
     //                                                            .Returns(mockData);
 
     //        //Act
-           
+
     //        var service = new TeacherService(mock.Object);
     //        var expectedData = service.GetTeacherList().ToList();
-            
+
     //        //Assertion
 
     //        Assert.Equal(expectedData.Count, mockData.Count);

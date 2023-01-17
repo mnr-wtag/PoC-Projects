@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bd73ae3f598445f9b8b9223074e0afd4" Name="Diagram1">
+        <EntityTypeShape EntityType="DotNetMvcDbModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.Admin" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.AuthUser" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.Cours" Width="1.5" PointX="7.5" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.Department" Width="1.5" PointX="5.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.EmailAddress" Width="1.5" PointX="5.25" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.Enrollment" Width="1.5" PointX="12.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.MobileNumber" Width="1.5" PointX="5.25" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.Student" Width="1.5" PointX="10.5" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.Teacher" Width="1.5" PointX="7.5" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DotNetMvcDbModel.UserProfile" Width="1.5" PointX="3" PointY="12.125" IsExpanded="true" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Admins_dbo_AuthUsers_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Admins_dbo_AuthUsers_UpdatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Admins_dbo_AuthUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Courses_dbo_AuthUsers_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Courses_dbo_AuthUsers_UpdatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Departments_dbo_AuthUsers_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Departments_dbo_AuthUsers_UpdatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Enrollments_dbo_AuthUsers_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Enrollments_dbo_AuthUsers_UpdatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Students_dbo_AuthUsers_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Students_dbo_AuthUsers_UpdatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Students_dbo_AuthUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Teachers_dbo_AuthUsers_CreatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Teachers_dbo_AuthUsers_UpdatedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Teachers_dbo_AuthUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_UserProfiles_dbo_AuthUsers_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Courses_dbo_Departments_DepartmentId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Enrollments_dbo_Courses_CourseId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Students_dbo_Departments_DepartmentId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_EmailAddresses_dbo_UserProfiles_UserProfile_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_Enrollments_dbo_Students_StudentId" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.FK_dbo_MobileNumbers_dbo_UserProfiles_UserProfile_Id" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.DepartmentAdmins" ManuallyRouted="false" />
+        <AssociationConnector Association="DotNetMvcDbModel.DepartmentTeacher" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

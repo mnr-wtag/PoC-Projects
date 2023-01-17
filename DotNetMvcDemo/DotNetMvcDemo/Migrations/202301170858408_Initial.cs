@@ -1,8 +1,8 @@
-﻿using System.Data.Entity.Migrations;
-
-namespace DotNetMvcDemo.Migrations
+﻿namespace DotNetMvcDemo.Migrations
 {
-    public partial class seed : DbMigration
+    using System.Data.Entity.Migrations;
+
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -19,23 +19,23 @@ namespace DotNetMvcDemo.Migrations
                     UpdatedAt = c.DateTime(nullable: false),
                     CreatedBy = c.Int(nullable: false),
                     UpdatedBy = c.Int(nullable: false),
-                    UserId = c.Int(nullable: false),
+                    User_Id = c.Int(),
                 })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AuthUsers", t => t.UserId)
                 .ForeignKey("dbo.AuthUsers", t => t.CreatedBy)
                 .ForeignKey("dbo.AuthUsers", t => t.UpdatedBy)
+                .ForeignKey("dbo.AuthUsers", t => t.User_Id)
                 .Index(t => t.CreatedBy)
                 .Index(t => t.UpdatedBy)
-                .Index(t => t.UserId);
+                .Index(t => t.User_Id);
 
             CreateTable(
                 "dbo.AuthUsers",
                 c => new
                 {
                     Id = c.Int(nullable: false, identity: true),
-                    UserName = c.String(),
-                    Password = c.String(),
+                    UserName = c.String(nullable: false),
+                    Password = c.String(nullable: false),
                     IsAdmin = c.Boolean(nullable: false),
                     CreatedAt = c.DateTime(nullable: false),
                     UpdatedAt = c.DateTime(nullable: false),
@@ -94,21 +94,21 @@ namespace DotNetMvcDemo.Migrations
                     StudentCardNumber = c.String(),
                     EnrollmentDate = c.DateTime(nullable: false),
                     DepartmentId = c.Int(nullable: false),
+                    UserId = c.Int(nullable: false),
                     CreatedAt = c.DateTime(nullable: false),
                     UpdatedAt = c.DateTime(nullable: false),
                     CreatedBy = c.Int(nullable: false),
                     UpdatedBy = c.Int(nullable: false),
-                    UserId = c.Int(nullable: false),
                 })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AuthUsers", t => t.CreatedBy)
                 .ForeignKey("dbo.Departments", t => t.DepartmentId, cascadeDelete: true)
                 .ForeignKey("dbo.AuthUsers", t => t.UpdatedBy)
-                .ForeignKey("dbo.AuthUsers", t => t.UserId)
+                .ForeignKey("dbo.AuthUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.DepartmentId)
+                .Index(t => t.UserId)
                 .Index(t => t.CreatedBy)
-                .Index(t => t.UpdatedBy)
-                .Index(t => t.UserId);
+                .Index(t => t.UpdatedBy);
 
             CreateTable(
                 "dbo.Enrollments",
@@ -117,6 +117,7 @@ namespace DotNetMvcDemo.Migrations
                     CourseId = c.Int(nullable: false),
                     StudentId = c.Int(nullable: false),
                     CourseEnrollDate = c.DateTime(nullable: false),
+                    IsActive = c.Boolean(nullable: false),
                     CreatedAt = c.DateTime(nullable: false),
                     UpdatedAt = c.DateTime(nullable: false),
                     CreatedBy = c.Int(nullable: false),
@@ -146,15 +147,15 @@ namespace DotNetMvcDemo.Migrations
                     UpdatedAt = c.DateTime(nullable: false),
                     CreatedBy = c.Int(nullable: false),
                     UpdatedBy = c.Int(nullable: false),
-                    UserId = c.Int(nullable: false),
+                    User_Id = c.Int(),
                 })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AuthUsers", t => t.CreatedBy)
                 .ForeignKey("dbo.AuthUsers", t => t.UpdatedBy)
-                .ForeignKey("dbo.AuthUsers", t => t.UserId)
+                .ForeignKey("dbo.AuthUsers", t => t.User_Id)
                 .Index(t => t.CreatedBy)
                 .Index(t => t.UpdatedBy)
-                .Index(t => t.UserId);
+                .Index(t => t.User_Id);
 
             CreateTable(
                 "dbo.UserProfiles",
@@ -224,19 +225,20 @@ namespace DotNetMvcDemo.Migrations
 
         public override void Down()
         {
+            DropForeignKey("dbo.Admins", "User_Id", "dbo.AuthUsers");
             DropForeignKey("dbo.Admins", "UpdatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.Admins", "CreatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.UserProfiles", "Id", "dbo.AuthUsers");
             DropForeignKey("dbo.MobileNumbers", "UserProfile_Id", "dbo.UserProfiles");
             DropForeignKey("dbo.EmailAddresses", "UserProfile_Id", "dbo.UserProfiles");
-            DropForeignKey("dbo.Teachers", "UserId", "dbo.AuthUsers");
-            DropForeignKey("dbo.Students", "UserId", "dbo.AuthUsers");
             DropForeignKey("dbo.Courses", "UpdatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.Departments", "UpdatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.DepartmentTeacher", "TeacherRefId", "dbo.Teachers");
             DropForeignKey("dbo.DepartmentTeacher", "DepartmentRefId", "dbo.Departments");
+            DropForeignKey("dbo.Teachers", "User_Id", "dbo.AuthUsers");
             DropForeignKey("dbo.Teachers", "UpdatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.Teachers", "CreatedBy", "dbo.AuthUsers");
+            DropForeignKey("dbo.Students", "UserId", "dbo.AuthUsers");
             DropForeignKey("dbo.Students", "UpdatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.Enrollments", "UpdatedBy", "dbo.AuthUsers");
             DropForeignKey("dbo.Enrollments", "StudentId", "dbo.Students");
@@ -249,7 +251,6 @@ namespace DotNetMvcDemo.Migrations
             DropForeignKey("dbo.DepartmentAdmins", "AdminsRefId", "dbo.Admins");
             DropForeignKey("dbo.DepartmentAdmins", "DepartmentRefId", "dbo.Departments");
             DropForeignKey("dbo.Courses", "CreatedBy", "dbo.AuthUsers");
-            DropForeignKey("dbo.Admins", "UserId", "dbo.AuthUsers");
             DropIndex("dbo.DepartmentTeacher", new[] { "TeacherRefId" });
             DropIndex("dbo.DepartmentTeacher", new[] { "DepartmentRefId" });
             DropIndex("dbo.DepartmentAdmins", new[] { "AdminsRefId" });
@@ -257,23 +258,23 @@ namespace DotNetMvcDemo.Migrations
             DropIndex("dbo.MobileNumbers", new[] { "UserProfile_Id" });
             DropIndex("dbo.EmailAddresses", new[] { "UserProfile_Id" });
             DropIndex("dbo.UserProfiles", new[] { "Id" });
-            DropIndex("dbo.Teachers", new[] { "UserId" });
+            DropIndex("dbo.Teachers", new[] { "User_Id" });
             DropIndex("dbo.Teachers", new[] { "UpdatedBy" });
             DropIndex("dbo.Teachers", new[] { "CreatedBy" });
             DropIndex("dbo.Enrollments", new[] { "UpdatedBy" });
             DropIndex("dbo.Enrollments", new[] { "CreatedBy" });
             DropIndex("dbo.Enrollments", new[] { "StudentId" });
             DropIndex("dbo.Enrollments", new[] { "CourseId" });
-            DropIndex("dbo.Students", new[] { "UserId" });
             DropIndex("dbo.Students", new[] { "UpdatedBy" });
             DropIndex("dbo.Students", new[] { "CreatedBy" });
+            DropIndex("dbo.Students", new[] { "UserId" });
             DropIndex("dbo.Students", new[] { "DepartmentId" });
             DropIndex("dbo.Departments", new[] { "UpdatedBy" });
             DropIndex("dbo.Departments", new[] { "CreatedBy" });
             DropIndex("dbo.Courses", new[] { "UpdatedBy" });
             DropIndex("dbo.Courses", new[] { "CreatedBy" });
             DropIndex("dbo.Courses", new[] { "DepartmentId" });
-            DropIndex("dbo.Admins", new[] { "UserId" });
+            DropIndex("dbo.Admins", new[] { "User_Id" });
             DropIndex("dbo.Admins", new[] { "UpdatedBy" });
             DropIndex("dbo.Admins", new[] { "CreatedBy" });
             DropTable("dbo.DepartmentTeacher");

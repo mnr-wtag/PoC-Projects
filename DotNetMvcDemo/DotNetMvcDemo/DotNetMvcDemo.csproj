@@ -275,14 +275,13 @@
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\UserProfilesController.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
-    <Compile Include="Data\ApplicationDbInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ServiceResponse.cs" />
-    <Compile Include="Migrations\202212070256167_seed.cs" />
-    <Compile Include="Migrations\202212070256167_seed.designer.cs">
-      <DependentUpon>202212070256167_seed.cs</DependentUpon>
+    <Compile Include="Migrations\202301170858408_Initial.cs" />
+    <Compile Include="Migrations\202301170858408_Initial.designer.cs">
+      <DependentUpon>202301170858408_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\IAuditableEntity.cs" />
@@ -455,8 +454,8 @@
     <Content Include="Scripts\jquery-3.6.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202212070256167_seed.resx">
-      <DependentUpon>202212070256167_seed.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202301170858408_Initial.resx">
+      <DependentUpon>202301170858408_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

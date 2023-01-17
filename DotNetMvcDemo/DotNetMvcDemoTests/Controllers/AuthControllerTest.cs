@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace DotNetMvcDemoTests.Controllers
+﻿namespace DotNetMvcDemoTests.Controllers
 {
     public class AuthControllerTest
     {

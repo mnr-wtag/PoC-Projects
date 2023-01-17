@@ -31,7 +31,7 @@ namespace DotNetMvcDemo.ViewModels.Student
         public int DepartmentId { get; set; }
 
         public int? CourseId { get; set; }
-        public SelectList CourseList { get; set; }
+       // public SelectList CourseList { get; set; }
 
         public List<int> CourseIds { get; set; }
 

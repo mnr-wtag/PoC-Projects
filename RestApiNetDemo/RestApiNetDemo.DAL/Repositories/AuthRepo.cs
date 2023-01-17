@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestApiNetDemo.BLL
+namespace RestApiNetDemo.DAL.Repositories
 {
-    public class Class1
+    internal class AuthRepo
     {
     }
 }

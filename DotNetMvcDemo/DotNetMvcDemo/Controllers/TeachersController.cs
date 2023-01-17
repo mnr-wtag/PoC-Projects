@@ -20,8 +20,8 @@ namespace DotNetMvcDemo.Controllers
         {
             //IQueryable<Teacher> teachers = db.Teachers.Include(t => t.Department);
             //return View(teachers.ToList());
-            var service = new TeacherService();
-            var data = service.GetTeacherList();
+            TeacherService service = new TeacherService();
+            System.Collections.Generic.IEnumerable<TeacherViewModel> data = service.GetTeacherList();
             return data == null ? View() : (ActionResult)View(data);
         }
 
@@ -29,8 +29,8 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var service = new TeacherService();
-            var data = service.GetTeacherById(id);
+            TeacherService service = new TeacherService();
+            TeacherDetailsViewModel data = service.GetTeacherById(id);
             return data == null ? HttpNotFound() : (ActionResult)View(data);
         }
 
@@ -48,8 +48,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = new TeacherService();
-                var result = service.AddNewTeacher(createTeacher);
+                TeacherService service = new TeacherService();
+                bool result = service.AddNewTeacher(createTeacher);
                 if (result) return RedirectToAction("Index");
             }
             return View(createTeacher);
@@ -59,9 +59,9 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var teacher = _repository.GetById(x => x.Id == id);
+            Teacher teacher = _repository.GetById(x => x.Id == id);
             if (teacher == null) return HttpNotFound();
-            var viewModel = new TeacherViewModel();
+            TeacherViewModel viewModel = new TeacherViewModel();
             viewModel.Id = teacher.Id;
             viewModel.FirstName = teacher.FirstName;
             viewModel.LastName = teacher.LastName;
@@ -78,8 +78,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = new TeacherService();
-                var result = service.UpdateTeacher(teacher);
+                TeacherService service = new TeacherService();
+                bool result = service.UpdateTeacher(teacher);
                 if (result) return RedirectToAction("Index");
             }
 
@@ -91,8 +91,8 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var service = new TeacherService();
-            var result = service.DeleteTeacher(id);
+            TeacherService service = new TeacherService();
+            bool result = service.DeleteTeacher(id);
             return result ? RedirectToAction("Index") : (ActionResult)View();
         }
 

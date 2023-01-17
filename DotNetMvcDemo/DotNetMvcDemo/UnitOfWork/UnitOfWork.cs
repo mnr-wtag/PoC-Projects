@@ -23,11 +23,11 @@ namespace DotNetMvcDemo.UnitOfWork
         public GenericRepository<T> GenericRepository<T>() where T : class
         {
             if (_repositories == null) _repositories = new Dictionary<string, object>();
-            var type = typeof(T).Name;
+            string type = typeof(T).Name;
             if (_repositories.ContainsKey(type)) return (GenericRepository<T>)_repositories[type];
 
-            var repositoryType = typeof(GenericRepository<T>);
-            var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), _context);
+            Type repositoryType = typeof(GenericRepository<T>);
+            object repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), _context);
             _repositories.Add(type, repositoryInstance);
             return (GenericRepository<T>)_repositories[type];
         }
@@ -69,9 +69,9 @@ namespace DotNetMvcDemo.UnitOfWork
             }
             catch (DbEntityValidationException dbEx)
             {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                foreach (DbEntityValidationResult validationErrors in dbEx.EntityValidationErrors)
                 {
-                    foreach (var validationError in validationErrors.ValidationErrors)
+                    foreach (DbValidationError validationError in validationErrors.ValidationErrors)
                     {
                         _errorMessage += $"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}" + Environment.NewLine;
                     }

@@ -29,12 +29,12 @@ namespace DotNetMvcDemo.Services
         public IEnumerable<TeacherViewModel> GetTeacherList()
         {
 
-            var teachers = _repository.GetAll(null, null, new List<string> { "Department" });
-            var teachersViewList = new List<TeacherViewModel>();
+            IEnumerable<Teacher> teachers = _repository.GetAll(null, null, new List<string> { "Department" });
+            List<TeacherViewModel> teachersViewList = new List<TeacherViewModel>();
 
-            foreach (var teacher in teachers)
+            foreach (Teacher teacher in teachers)
             {
-                var teacherView = new TeacherViewModel();
+                TeacherViewModel teacherView = new TeacherViewModel();
 
                 teacherView.FirstName = teacher.FirstName;
 
@@ -50,11 +50,11 @@ namespace DotNetMvcDemo.Services
 
         public TeacherDetailsViewModel GetTeacherById(int? id)
         {
-            var teacher = _repository.GetById(x => x.Id == id, new List<string> { "Department" });
+            Teacher teacher = _repository.GetById(x => x.Id == id, new List<string> { "Department" });
 
             if (teacher == null) return null;
 
-            var teacherDetailsView = new TeacherDetailsViewModel();
+            TeacherDetailsViewModel teacherDetailsView = new TeacherDetailsViewModel();
 
             teacherDetailsView.Id = teacher.Id;
             teacherDetailsView.FirstName = teacher.FirstName;
@@ -73,7 +73,7 @@ namespace DotNetMvcDemo.Services
             try
             {
                 if (viewModel == null) return false;
-                var model = new Teacher();
+                Teacher model = new Teacher();
                 model.FirstName = viewModel.FirstName;
                 model.LastName = viewModel.LastName;
                 model.TeacherCardNumber = viewModel.TeacherCardNumber;
@@ -101,7 +101,7 @@ namespace DotNetMvcDemo.Services
         public bool UpdateTeacher(TeacherViewModel viewModel)
         {
             if (viewModel == null) return false;
-            var model = _repository.GetById(x => x.Id == viewModel.Id);
+            Teacher model = _repository.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Id = viewModel.Id;
             model.FirstName = viewModel.FirstName;
@@ -121,7 +121,7 @@ namespace DotNetMvcDemo.Services
         public bool DeleteTeacher(int? id)
         {
 
-            var model = _repository.GetById(x => x.Id == id);
+            Teacher model = _repository.GetById(x => x.Id == id);
             if (model == null) return false;
             _repository.Delete(model);
             _unitOfWork.Save();

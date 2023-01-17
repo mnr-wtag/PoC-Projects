@@ -7,6 +7,7 @@ using DotNetMvcDemo.ViewModels.Student;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace DotNetMvcDemo.Services
 {
@@ -32,12 +33,12 @@ namespace DotNetMvcDemo.Services
         public IEnumerable<StudentViewModel> GetStudentList()
         {
 
-            var students = _studentRepository.GetAll(null, null, new List<string> { "Department" });
-            var studentsViewList = new List<StudentViewModel>();
+            IEnumerable<Student> students = _studentRepository.GetAll(null, null, new List<string> { "Department" });
+            List<StudentViewModel> studentsViewList = new List<StudentViewModel>();
 
-            foreach (var student in students)
+            foreach (Student student in students)
             {
-                var studentView = new StudentViewModel();
+                StudentViewModel studentView = new StudentViewModel();
 
                 studentView.FirstName = student.FirstName;
                 studentView.MiddleName = student.MiddleName;
@@ -55,11 +56,11 @@ namespace DotNetMvcDemo.Services
 
         public StudentDetailsViewModel GetStudentById(int? id)
         {
-            var student = _studentRepository.GetById(x => x.Id == id);
+            Student student = _studentRepository.GetById(x => x.Id == id);
 
             if (student == null) return null;
 
-            var studentDetailsView = new StudentDetailsViewModel
+            StudentDetailsViewModel studentDetailsView = new StudentDetailsViewModel
             {
                 Id = student.Id,
                 FirstName = student.FirstName,
@@ -78,14 +79,14 @@ namespace DotNetMvcDemo.Services
         public List<StudentViewModel> GetStudentsByName(string name)
         {
 
-            var students = _studentRepository.GetAll(x => x.FirstName.Contains(name) || x.LastName.Contains(name));
+            IEnumerable<Student> students = _studentRepository.GetAll(x => x.FirstName.Contains(name) || x.LastName.Contains(name));
 
             if (students == null) return null;
 
-            var viewModelList = new List<StudentViewModel>();
-            foreach (var student in students)
+            List<StudentViewModel> viewModelList = new List<StudentViewModel>();
+            foreach (Student student in students)
             {
-                var viewModel = new StudentViewModel();
+                StudentViewModel viewModel = new StudentViewModel();
                 viewModel.Id = student.Id;
                 viewModel.FirstName = student.FirstName;
                 viewModel.LastName = student.LastName;
@@ -99,7 +100,7 @@ namespace DotNetMvcDemo.Services
         {
             try
             {
-                var response = new ServiceResponse();
+                ServiceResponse response = new ServiceResponse();
                 if (viewModel == null)
                 {
                     response.Response = Response.NotFound;
@@ -107,15 +108,15 @@ namespace DotNetMvcDemo.Services
                     return response;
                 }
 
-                var existingStudents = _studentRepository.GetAll(x => x.StudentCardNumber == viewModel.StudentCardNumber);
-                if (existingStudents != null)
+                IEnumerable<Student> existingStudents = _studentRepository.GetAll(x => x.StudentCardNumber == viewModel.StudentCardNumber);
+                if (existingStudents.Any())
                 {
                     response.Response = Response.Exists;
                     response.Message = "Students with same ID already exists";
                     return response;
                 }
 
-                var studentModel = new Student();
+                Student studentModel = new Student();
                 studentModel.FirstName = viewModel.FirstName;
                 studentModel.MiddleName = viewModel.MiddleName;
                 studentModel.LastName = viewModel.LastName;
@@ -127,34 +128,34 @@ namespace DotNetMvcDemo.Services
                 studentModel.CreatedBy = 1;
                 studentModel.UpdatedBy = 1;
 
-                var appliedCourses = viewModel.CourseList.ToList();
+                //List<System.Web.Mvc.SelectListItem> appliedCourses = ViewBag.CourseList.ToList();
 
-                foreach (var course in appliedCourses)
-                {
-                    if (Convert.ToInt32(course.Value) != viewModel.DepartmentId)
-                    {
-                        response.Response = Response.Error;
-                        response.Message = "This course is not applicable with the selected department";
-                        return response;
-                    }
-                }
-                var enrollmentList = new List<Enrollment>();
-                foreach (var course in appliedCourses)
-                {
-                    var enrollmentModel = new Enrollment();
-                    enrollmentModel.CourseId = Convert.ToInt32(course.Value);
-                    enrollmentModel.StudentId = studentModel.Id;
-                    enrollmentModel.CourseEnrollDate = DateTime.Now;
-                    enrollmentModel.CreatedAt = DateTime.Now;
-                    enrollmentModel.UpdatedAt = DateTime.Now;
-                    enrollmentModel.CreatedBy = 1;
-                    enrollmentModel.UpdatedBy = 1;
+                //foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
+                //{
+                //    if (Convert.ToInt32(course.Value) != viewModel.DepartmentId)
+                //    {
+                //        response.Response = Response.Error;
+                //        response.Message = "This course is not applicable with the selected department";
+                //        return response;
+                //    }
+                //}
+                //List<Enrollment> enrollmentList = new List<Enrollment>();
+                //foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
+                //{
+                //    Enrollment enrollmentModel = new Enrollment();
+                //    enrollmentModel.CourseId = Convert.ToInt32(course.Value);
+                //    enrollmentModel.StudentId = studentModel.Id;
+                //    enrollmentModel.CourseEnrollDate = DateTime.Now;
+                //    enrollmentModel.CreatedAt = DateTime.Now;
+                //    enrollmentModel.UpdatedAt = DateTime.Now;
+                //    enrollmentModel.CreatedBy = 1;
+                //    enrollmentModel.UpdatedBy = 1;
 
-                    enrollmentList.Add(enrollmentModel);
-                }
-                IEnumerable<Enrollment> enrollments = enrollmentList;
+                //    enrollmentList.Add(enrollmentModel);
+                //}
+                //IEnumerable<Enrollment> enrollments = enrollmentList;
 
-                var authUser = new AuthUser();
+                AuthUser authUser = new AuthUser();
                 authUser.IsAdmin = false;
                 authUser.UserName = viewModel.StudentCardNumber;
                 authUser.Password = viewModel.StudentCardNumber;
@@ -167,7 +168,7 @@ namespace DotNetMvcDemo.Services
                 _unitOfWork.CreateTransaction();
 
                 _studentRepository.Insert(studentModel);
-                _enrollmentRepository.BulkInsert(enrollments);
+               // _enrollmentRepository.BulkInsert(enrollments);
                 _authRepository.Insert(authUser);
 
                 _unitOfWork.Save();
@@ -188,7 +189,7 @@ namespace DotNetMvcDemo.Services
         public bool UpdateDepartment(StudentViewModel viewModel)
         {
             if (viewModel == null) return false;
-            var model = _studentRepository.GetById(x => x.Id == viewModel.Id);
+            Student model = _studentRepository.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Id = viewModel.Id;
             model.FirstName = viewModel.FirstName;
@@ -207,7 +208,7 @@ namespace DotNetMvcDemo.Services
 
         public bool DeleteStudent(int? id)
         {
-            var model = _studentRepository.GetById(x => x.Id == id);
+            Student model = _studentRepository.GetById(x => x.Id == id);
             if (model == null) return false;
             _studentRepository.Delete(model);
             _unitOfWork.Save();

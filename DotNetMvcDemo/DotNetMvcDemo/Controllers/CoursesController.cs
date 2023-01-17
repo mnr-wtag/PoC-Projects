@@ -20,16 +20,16 @@ namespace DotNetMvcDemo.Controllers
         }
         public ActionResult Index()
         {
-            var service = new CourseService();
-            var data = service.GetCourseList();
+            CourseService service = new CourseService();
+            System.Collections.Generic.IEnumerable<CourseViewModel> data = service.GetCourseList();
             return data == null ? HttpNotFound() : (ActionResult)View(data);
         }
 
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var service = new CourseService();
-            var data = service.GetCourseById(id);
+            CourseService service = new CourseService();
+            CourseDetailsViewModel data = service.GetCourseById(id);
             return data == null ? HttpNotFound() : (ActionResult)View(data);
         }
 
@@ -46,8 +46,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = new CourseService();
-                var result = service.AddNewCourse(createCourseViewModel);
+                CourseService service = new CourseService();
+                bool result = service.AddNewCourse(createCourseViewModel);
                 if (result) return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(_db.Departments, "Id", "Name", createCourseViewModel.DepartmentId);
@@ -60,10 +60,10 @@ namespace DotNetMvcDemo.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var course = _repository.GetById(x => x.Id == id);
+            Course course = _repository.GetById(x => x.Id == id);
             if (course == null) return HttpNotFound();
 
-            var courseView = new CourseViewModel
+            CourseViewModel courseView = new CourseViewModel
             {
                 Name = course.Name,
                 Credit = course.Credit,
@@ -80,8 +80,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = new CourseService();
-                var result = service.UpdateCourse(courseView);
+                CourseService service = new CourseService();
+                bool result = service.UpdateCourse(courseView);
                 if (result) return RedirectToAction("Index");
             }
 
@@ -97,7 +97,7 @@ namespace DotNetMvcDemo.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var course = _repository.GetById(x => x.Id == id);
+            Course course = _repository.GetById(x => x.Id == id);
             if (course == null) return HttpNotFound();
             _repository.Delete(course);
 

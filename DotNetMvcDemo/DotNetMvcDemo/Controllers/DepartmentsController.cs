@@ -23,13 +23,13 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Index()
         {
 
-            var departments = _repository.GetAll();
+            IEnumerable<Department> departments = _repository.GetAll();
             if (departments == null) return HttpNotFound();
-            var departmentsViewList = new List<DepartmentViewModel>();
+            List<DepartmentViewModel> departmentsViewList = new List<DepartmentViewModel>();
 
-            foreach (var department in departments)
+            foreach (Department department in departments)
             {
-                var departmentView = new DepartmentViewModel
+                DepartmentViewModel departmentView = new DepartmentViewModel
                 {
                     Id = department.Id,
                     Name = department.Name,
@@ -45,8 +45,8 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Details(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            var service = new DepartmentService();
-            var result = service.GetDepartmentById(id);
+            DepartmentService service = new DepartmentService();
+            DepartmentViewModel result = service.GetDepartmentById(id);
             return result == null ? HttpNotFound() : (ActionResult)View(result);
         }
 
@@ -62,8 +62,8 @@ namespace DotNetMvcDemo.Controllers
         public ActionResult Create(CreateDepartmentViewModel createDepartmentViewModel)
         {
             if (!ModelState.IsValid) return View(createDepartmentViewModel);
-            var service = new DepartmentService();
-            var result = service.AddNewDepartment(createDepartmentViewModel);
+            DepartmentService service = new DepartmentService();
+            bool result = service.AddNewDepartment(createDepartmentViewModel);
             return result ? RedirectToAction("Index") : (ActionResult)HttpNotFound();
         }
 
@@ -72,8 +72,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var department = _repository.GetById(x => x.Id == id);
-            var departmentView = new DepartmentViewModel();
+            Department department = _repository.GetById(x => x.Id == id);
+            DepartmentViewModel departmentView = new DepartmentViewModel();
             if (department == null) return View(departmentView);
 
             departmentView.Id = department.Id;
@@ -90,8 +90,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (!ModelState.IsValid) return View(departmentView);
 
-            var service = new DepartmentService();
-            var result = service.UpdateDepartment(departmentView);
+            DepartmentService service = new DepartmentService();
+            bool result = service.UpdateDepartment(departmentView);
             return result ? RedirectToAction("Index") : (ActionResult)View(departmentView);
         }
 
@@ -100,8 +100,8 @@ namespace DotNetMvcDemo.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var service = new DepartmentService();
-            var result = service.DeleteDepartment(id);
+            DepartmentService service = new DepartmentService();
+            bool result = service.DeleteDepartment(id);
             return RedirectToAction("Index");
 
         }
