@@ -57,14 +57,15 @@ namespace DotNetMvcDemo.Controllers
             if (model.DepartmentId != 0)
             {
                 System.Collections.Generic.IEnumerable<Course> courses = _courseRepository.GetAll(x => x.DepartmentId == model.DepartmentId);
-                model.CourseList = new SelectList(courses, "Id", "Name");
+                ViewBag.CourseList = new SelectList(courses, "Id", "Name");
             }
             else
             {
-                model.CourseList = new SelectList(Enumerable.Empty<SelectListItem>());
+                ViewBag.CourseList = new SelectList(Enumerable.Empty<SelectListItem>());
             }
 
         }
+        [HttpGet]
         public ActionResult Create(int? id)
         {
             ViewBag.DepartmentId = new SelectList(_deptRepository.GetAll(), "Id", "Name");
@@ -81,7 +82,7 @@ namespace DotNetMvcDemo.Controllers
             if (ModelState.IsValid)
             {
                 StudentService service = new StudentService();
-                Helpers.ServiceResponse result = service.AddNewStudent(createStudentViewModel);
+                var result = service.AddNewStudent(createStudentViewModel);
                 if (result.Response == Helpers.Response.Success) return RedirectToAction("Index");
             }
             ViewBag.DepartmentId = new SelectList(_deptRepository.GetAll(), "Id", "Name");

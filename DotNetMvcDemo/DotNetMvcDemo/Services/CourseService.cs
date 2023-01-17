@@ -41,12 +41,13 @@ namespace DotNetMvcDemo.Services
                 courseView.DepartmentName = course.Department.Name;
                 coursesViewList.Add(courseView);
             }
+
             return coursesViewList;
         }
 
         public CourseDetailsViewModel GetCourseById(int? id)
         {
-            Course course = _repository.GetById(x => x.Id == id, new List<string> { "Enrollment" });
+            Course course = _repository.GetById(x => x.Id == id, new List<string> { "Enrollments" });
             if (course == null) return null;
 
             CourseDetailsViewModel courseView = new CourseDetailsViewModel();
@@ -55,7 +56,7 @@ namespace DotNetMvcDemo.Services
             courseView.Enrollments = course.Enrollments;
             courseView.Credit = course.Credit;
             courseView.DepartmentName = course.Department.Name;
-
+            courseView.Enrollments = course.Enrollments;
             return courseView;
         }
 

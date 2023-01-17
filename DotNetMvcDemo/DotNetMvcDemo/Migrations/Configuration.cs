@@ -47,79 +47,80 @@ namespace DotNetMvcDemo.Migrations
             }
 
 
-            List<Student> studentList = new List<Student>
-            {
-                new Student
-                {
-                    FirstName = "Nafisur",
-                    LastName = "Rahman",
-                    DepartmentId = 1,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy=1,UpdatedBy=1,
-                    EnrollmentDate = DateTime.Now,
-                }
-            };
-            foreach (Student student in studentList)
-            {
-                context.Students.AddOrUpdate(student);
-                context.SaveChanges();
-            }
+            //List<Student> studentList = new List<Student>
+            //{
+            //    new Student
+            //    {
+            //        FirstName = "Nafisur",
+            //        LastName = "Rahman",
+            //        DepartmentId = 1,
+            //        CreatedAt = DateTime.Now,
+            //        UpdatedAt = DateTime.Now,
+            //        CreatedBy=1,
+            //        UpdatedBy=1,
+            //        EnrollmentDate = DateTime.Now,
+            //    }
+            //};
+            //foreach (Student student in studentList)
+            //{
+            //    context.Students.AddOrUpdate(student);
+            //    context.SaveChanges();
+            //}
 
 
-            List<Course> courseList = new List<Course>()
-            {
-                new Course
-                {
-                    Name = "Data Structure",
-                    Credit = 3,
-                    DepartmentId = 1,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy=1,UpdatedBy=1
-                },
-                new Course
-                {
-                    Name = "Algorithm",
-                    Credit = 3,
-                    DepartmentId = 1,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy=1,UpdatedBy=1
-                },
-                new Course
-                {
-                    Name = "Introduction to Programming",
-                    Credit = 1,
-                    DepartmentId = 1,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy=1,UpdatedBy=1
-                },
-                new Course
-                {
-                    Name = "Electric Circuits DC",
-                    Credit = 3,
-                    DepartmentId = 2,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy=1,UpdatedBy=1
-                },
-                new Course
-                {
-                    Name = "Electric Circuits DC - Lab",
-                    Credit = 1,
-                    DepartmentId = 2,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy=1,UpdatedBy=1
-                },
-            };
-            foreach (Course course in courseList)
-            {
-                context.Courses.AddOrUpdate(course);
-                context.SaveChanges();
-            }
+            //List<Course> courseList = new List<Course>()
+            //{
+            //    new Course
+            //    {
+            //        Name = "Data Structure",
+            //        Credit = 3,
+            //        DepartmentId = 1,
+            //        CreatedAt = DateTime.Now,
+            //        UpdatedAt = DateTime.Now,
+            //        CreatedBy=1,UpdatedBy=1
+            //    },
+            //    new Course
+            //    {
+            //        Name = "Algorithm",
+            //        Credit = 3,
+            //        DepartmentId = 1,
+            //        CreatedAt = DateTime.Now,
+            //        UpdatedAt = DateTime.Now,
+            //        CreatedBy=1,UpdatedBy=1
+            //    },
+            //    new Course
+            //    {
+            //        Name = "Introduction to Programming",
+            //        Credit = 1,
+            //        DepartmentId = 1,
+            //        CreatedAt = DateTime.Now,
+            //        UpdatedAt = DateTime.Now,
+            //        CreatedBy=1,UpdatedBy=1
+            //    },
+            //    new Course
+            //    {
+            //        Name = "Electric Circuits DC",
+            //        Credit = 3,
+            //        DepartmentId = 2,
+            //        CreatedAt = DateTime.Now,
+            //        UpdatedAt = DateTime.Now,
+            //        CreatedBy=1,UpdatedBy=1
+            //    },
+            //    new Course
+            //    {
+            //        Name = "Electric Circuits DC - Lab",
+            //        Credit = 1,
+            //        DepartmentId = 2,
+            //        CreatedAt = DateTime.Now,
+            //        UpdatedAt = DateTime.Now,
+            //        CreatedBy=1,UpdatedBy=1
+            //    },
+            //};
+            //foreach (Course course in courseList)
+            //{
+            //    context.Courses.AddOrUpdate(course);
+            //    context.SaveChanges();
+            //}
 
             base.Seed(context);
         }

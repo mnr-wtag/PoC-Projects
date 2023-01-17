@@ -11,7 +11,8 @@ namespace DotNetMvcDemo.Controllers
     {
         public ActionResult Signup()
         {
-            return View();
+            return HttpContext.User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (ActionResult)View();
+
         }
 
         [HttpPost]

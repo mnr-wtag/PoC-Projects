@@ -7,6 +7,7 @@ using DotNetMvcDemo.ViewModels.Student;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace DotNetMvcDemo.Services
 {
@@ -108,7 +109,7 @@ namespace DotNetMvcDemo.Services
                 }
 
                 IEnumerable<Student> existingStudents = _studentRepository.GetAll(x => x.StudentCardNumber == viewModel.StudentCardNumber);
-                if (existingStudents != null)
+                if (existingStudents.Any())
                 {
                     response.Response = Response.Exists;
                     response.Message = "Students with same ID already exists";
@@ -127,32 +128,32 @@ namespace DotNetMvcDemo.Services
                 studentModel.CreatedBy = 1;
                 studentModel.UpdatedBy = 1;
 
-                List<System.Web.Mvc.SelectListItem> appliedCourses = viewModel.CourseList.ToList();
+                //List<System.Web.Mvc.SelectListItem> appliedCourses = ViewBag.CourseList.ToList();
 
-                foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
-                {
-                    if (Convert.ToInt32(course.Value) != viewModel.DepartmentId)
-                    {
-                        response.Response = Response.Error;
-                        response.Message = "This course is not applicable with the selected department";
-                        return response;
-                    }
-                }
-                List<Enrollment> enrollmentList = new List<Enrollment>();
-                foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
-                {
-                    Enrollment enrollmentModel = new Enrollment();
-                    enrollmentModel.CourseId = Convert.ToInt32(course.Value);
-                    enrollmentModel.StudentId = studentModel.Id;
-                    enrollmentModel.CourseEnrollDate = DateTime.Now;
-                    enrollmentModel.CreatedAt = DateTime.Now;
-                    enrollmentModel.UpdatedAt = DateTime.Now;
-                    enrollmentModel.CreatedBy = 1;
-                    enrollmentModel.UpdatedBy = 1;
+                //foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
+                //{
+                //    if (Convert.ToInt32(course.Value) != viewModel.DepartmentId)
+                //    {
+                //        response.Response = Response.Error;
+                //        response.Message = "This course is not applicable with the selected department";
+                //        return response;
+                //    }
+                //}
+                //List<Enrollment> enrollmentList = new List<Enrollment>();
+                //foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
+                //{
+                //    Enrollment enrollmentModel = new Enrollment();
+                //    enrollmentModel.CourseId = Convert.ToInt32(course.Value);
+                //    enrollmentModel.StudentId = studentModel.Id;
+                //    enrollmentModel.CourseEnrollDate = DateTime.Now;
+                //    enrollmentModel.CreatedAt = DateTime.Now;
+                //    enrollmentModel.UpdatedAt = DateTime.Now;
+                //    enrollmentModel.CreatedBy = 1;
+                //    enrollmentModel.UpdatedBy = 1;
 
-                    enrollmentList.Add(enrollmentModel);
-                }
-                IEnumerable<Enrollment> enrollments = enrollmentList;
+                //    enrollmentList.Add(enrollmentModel);
+                //}
+                //IEnumerable<Enrollment> enrollments = enrollmentList;
 
                 AuthUser authUser = new AuthUser();
                 authUser.IsAdmin = false;
@@ -167,7 +168,7 @@ namespace DotNetMvcDemo.Services
                 _unitOfWork.CreateTransaction();
 
                 _studentRepository.Insert(studentModel);
-                _enrollmentRepository.BulkInsert(enrollments);
+               // _enrollmentRepository.BulkInsert(enrollments);
                 _authRepository.Insert(authUser);
 
                 _unitOfWork.Save();
