@@ -6,12 +6,19 @@ using System.Linq;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    internal class CourseRepo : IRepository<Cours, int>
+    public class CourseRepo : IRepository<Cours, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
-        public CourseRepo(DotNetMvcDbEntities dbEntities)
+        private readonly IRepository<Cours, int> _repo;
+
+        public CourseRepo()
         {
-            _dbEntities = dbEntities;
+            _dbEntities = new DotNetMvcDbEntities();
+        }
+
+        public CourseRepo(IRepository<Cours, int> repo)
+        {
+            _repo = repo;
         }
 
         public bool Add(Cours entity)

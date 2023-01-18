@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RestApiNetDemo.DAL")]
+[assembly: AssemblyTitle("RestApiNetDemo.BEL")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RestApiNetDemo.DAL")]
+[assembly: AssemblyProduct("RestApiNetDemo.BEL")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d032eb2c-3c29-4b67-9a2f-ffe4da82996c")]
+[assembly: Guid("6fb3209e-b81c-4c63-9801-ae451329c1bb")]
 
 // Version information for an assembly consists of the following four values:
 //

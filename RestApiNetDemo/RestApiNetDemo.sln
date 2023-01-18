@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApiNetDemo.DAL", "RestA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApiNetDemo.BLL", "RestApiNetDemo.BLL\RestApiNetDemo.BLL.csproj", "{86D5BA92-1CC1-492E-B818-07E6928E1567}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestApiNetDemo.BEL", "RestApiNetDemo.BEL\RestApiNetDemo.BEL.csproj", "{6FB3209E-B81C-4C63-9801-AE451329C1BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{86D5BA92-1CC1-492E-B818-07E6928E1567}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86D5BA92-1CC1-492E-B818-07E6928E1567}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86D5BA92-1CC1-492E-B818-07E6928E1567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FB3209E-B81C-4C63-9801-AE451329C1BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB3209E-B81C-4C63-9801-AE451329C1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB3209E-B81C-4C63-9801-AE451329C1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB3209E-B81C-4C63-9801-AE451329C1BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

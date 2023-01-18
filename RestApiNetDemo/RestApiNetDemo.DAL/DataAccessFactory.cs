@@ -24,5 +24,9 @@ namespace RestApiNetDemo.DAL
         {
             return new CourseRepo(_dbEntities);
         }
+        public static IRepository<Department, int> DepartmentDataAccess()
+        {
+            return new DepartmentRepo(_dbEntities);
+        }
     }
 }

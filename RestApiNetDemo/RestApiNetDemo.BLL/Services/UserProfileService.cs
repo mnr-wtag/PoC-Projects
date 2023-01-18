@@ -1,6 +1,6 @@
 ﻿namespace RestApiNetDemo.BLL.Services
 {
-    internal class UserProfileService
+    public class UserProfileService
     {
     }
 }

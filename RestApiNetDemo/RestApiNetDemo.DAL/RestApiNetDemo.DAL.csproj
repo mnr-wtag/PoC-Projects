@@ -99,12 +99,13 @@
     <Compile Include="Data\UserProfile.cs">
       <DependentUpon>UMSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="IRepositories\IAuth.cs" />
     <Compile Include="IRepositories\IRepository.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdminRepo.cs" />
     <Compile Include="Repositories\AuthRepo.cs" />
     <Compile Include="Repositories\CourseRepo.cs" />
+    <Compile Include="Repositories\DepartmentRepo.cs" />
     <Compile Include="Repositories\EnrollmentRepo.cs" />
     <Compile Include="Repositories\StudentRepo.cs" />
     <Compile Include="Repositories\TeacherRepo.cs" />

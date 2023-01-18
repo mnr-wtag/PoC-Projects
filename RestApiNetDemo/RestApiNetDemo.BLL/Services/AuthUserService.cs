@@ -1,6 +1,6 @@
 ﻿namespace RestApiNetDemo.BLL.Services
 {
-    internal class AuthUserService
+    public class AuthUserService
     {
     }
 }
