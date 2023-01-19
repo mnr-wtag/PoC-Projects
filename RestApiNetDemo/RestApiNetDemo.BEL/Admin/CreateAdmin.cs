@@ -1,6 +1,6 @@
-﻿namespace RestApiNetDemo.BEL.Entities.Admin
+﻿namespace RestApiNetDemo.BEL.Admin
 {
-    internal class CreateAdmin
+    public class CreateAdmin
     {
     }
 }

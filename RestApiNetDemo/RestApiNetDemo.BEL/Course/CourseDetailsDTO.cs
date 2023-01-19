@@ -1,14 +1,11 @@
-﻿using RestApiNetDemo.BEL.Entities.Enrollment;
-using System;
+﻿using RestApiNetDemo.BEL.Enrollment;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestApiNetDemo.BEL.Course
 {
-    internal class CourseDetailsDTO
+    public class CourseDetailsDTO:CourseDTO
     {
-        public IEnumerable<Enrollment> Enrollments { get; set; }
+        public IEnumerable<EnrollmentDTO> Enrollments { get; set; }
+       
     }
 }

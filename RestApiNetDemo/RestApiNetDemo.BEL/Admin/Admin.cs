@@ -1,4 +1,4 @@
-﻿namespace RestApiNetDemo.BEL.Entities.Admin
+﻿namespace RestApiNetDemo.BEL.Admin
 {
     public class Admin
     {

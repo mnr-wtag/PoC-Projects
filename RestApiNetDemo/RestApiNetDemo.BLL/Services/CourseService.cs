@@ -1,52 +1,54 @@
-﻿using RestApiNetDemo.DAL.Data;
+﻿using RestApiNetDemo.BEL.Course;
+using RestApiNetDemo.DAL;
+using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
-using RestApiNetDemo.DAL.Repositories;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace RestApiNetDemo.BLL.Services
 {
     public class CourseService
     {
-        private readonly IRepository<Cours, int> _repo;
+        private readonly IRepository<Cours, int> _repository;
 
         public CourseService(IRepository<Cours, int> repo)
         {
-            _repo = repo;
+            _repository = repo;
         }
 
         public CourseService()
         {
-            _repo = new CourseRepo();
+            _repository = DataAccessFactory.CourseDataAccess();
         }
 
-        public IEnumerable<CourseViewModel> GetCourseList()
+        public  IEnumerable<CourseDTO> GetCourseList()
         {
 
-            IEnumerable<Course> courses = _repository.GetAll();
-            List<CourseViewModel> coursesViewList = new List<CourseViewModel>();
+            var courses = _repository.GetAll();
+            List<CourseDTO> coursesViewList = new List<CourseDTO>();
 
-            foreach (Course course in courses)
+            foreach (var course in courses)
             {
-                CourseViewModel courseView = new CourseViewModel();
+                var courseView = new CourseDTO();
                 courseView.Id = course.Id;
                 courseView.Name = course.Name;
                 courseView.Credit = course.Credit;
                 courseView.DepartmentName = course.Department.Name;
+                courseView.DepartmentId = course.Department.Id;
                 coursesViewList.Add(courseView);
             }
             return coursesViewList;
         }
 
-        public CourseDetailsViewModel GetCourseById(int? id)
+        public CourseDetailsDTO GetCourseById(int id)
         {
-            Course course = _repository.GetById(x => x.Id == id, new List<string> { "Enrollment" });
+            var course = _repository.GetById(id);
             if (course == null) return null;
 
-            CourseDetailsViewModel courseView = new CourseDetailsViewModel();
+            var courseView = new CourseDetailsDTO();
             courseView.Id = course.Id;
             courseView.Name = course.Name;
-            courseView.Enrollments = course.Enrollments;
+            courseView.Enrollments = course.Enrollments as IEnumerable<BEL.Enrollment.EnrollmentDTO>;
             courseView.Credit = course.Credit;
             courseView.DepartmentName = course.Department.Name;
 
@@ -55,11 +57,11 @@ namespace RestApiNetDemo.BLL.Services
 
 
 
-        public bool AddNewCourse(CreateCourseViewModel viewModel)
+        public bool AddNewCourse(CreateCourseDTO viewModel)
         {
             try
             {
-                Course course = new Course();
+                var course = new Cours();
                 course.Name = viewModel.Name;
                 course.Credit = viewModel.Credit;
                 course.CreatedAt = DateTime.Now;
@@ -68,26 +70,26 @@ namespace RestApiNetDemo.BLL.Services
                 course.CreatedBy = 1;
                 course.UpdatedBy = 1;
 
-                _unitOfWork.CreateTransaction();
+                
 
-                _repository.Insert(course);
-                _unitOfWork.Save();
+                _repository.Add(course);
+               
 
-                _unitOfWork.Commit();
+               
                 return true;
             }
             catch (Exception)
             {
                 //Log the exception and rollback the transaction
-                _unitOfWork.Rollback();
+               
                 throw;
             }
         }
 
-        public bool UpdateCourse(CourseViewModel viewModel)
+        public bool UpdateCourse(CourseDTO viewModel)
         {
             if (viewModel == null) return false;
-            Course model = _repository.GetById(x => x.Id == viewModel.Id);
+            var model = _repository.GetById(viewModel.Id);
             if (model == null) return false;
             model.Name = viewModel.Name;
             model.Credit = viewModel.Credit;
@@ -96,18 +98,16 @@ namespace RestApiNetDemo.BLL.Services
             model.UpdatedBy = 1;
 
             _repository.Update(model);
-            _unitOfWork.Save();
             return true;
         }
 
 
-        public bool DeleteCourse(int? id)
+        public bool DeleteCourse(int id)
         {
-            Course course = _repository.GetById(x => x.Id == id);
+            var course = _repository.GetById( id);
 
             if (course == null) return false;
-            _repository.Delete(course);
-            _unitOfWork.Save();
+            _repository.Delete(id);
             return true;
         }
     }

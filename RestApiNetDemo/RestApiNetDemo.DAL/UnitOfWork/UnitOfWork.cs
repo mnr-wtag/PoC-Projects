@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity.Validation;
 
 namespace RestApiNetDemo.DAL.UnitOfWork
 {
@@ -11,7 +9,16 @@ namespace RestApiNetDemo.DAL.UnitOfWork
     {
         private readonly TContext _context;
         private bool _disposed;
+        private string _errorMessage = string.Empty;
+        private readonly Dictionary<string, object> _repositories;
         public TContext Context => _context;
+
+        public UnitOfWork()
+        {
+            _context = new TContext();
+        }
+
+
 
         public void Dispose()
         {
@@ -28,7 +35,22 @@ namespace RestApiNetDemo.DAL.UnitOfWork
 
         public void Save()
         {
-            _context.SaveChanges();
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (DbEntityValidationResult validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (DbValidationError validationError in validationErrors.ValidationErrors)
+                    {
+                        _errorMessage += $"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}" + Environment.NewLine;
+                    }
+                }
+
+                throw new Exception(_errorMessage, dbEx);
+            }
         }
     }
 }

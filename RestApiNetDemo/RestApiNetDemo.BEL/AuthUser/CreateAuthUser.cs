@@ -1,6 +1,6 @@
-﻿namespace RestApiNetDemo.BEL.Entities.AuthUser
+﻿namespace RestApiNetDemo.BEL.AuthUser
 {
-    internal class CreateAuthUser
+    public class CreateAuthUser
     {
     }
 }

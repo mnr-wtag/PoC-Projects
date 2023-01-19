@@ -6,20 +6,17 @@ using System.Linq;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    internal class DepartmentRepo : IRepository<Department, int>
+    internal class DepartmentRepo : IRepository<Department, int, string>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
-        private readonly IRepository<Department, int> _repo;
 
-        public DepartmentRepo()
+
+        public DepartmentRepo(DotNetMvcDbEntities dbEntities)
         {
-            _dbEntities = new DotNetMvcDbEntities();
+            _dbEntities = dbEntities;
         }
 
-        public DepartmentRepo(IRepository<Department, int> repo)
-        {
-            _repo = repo;
-        }
+
 
         public bool Add(Department entity)
         {
@@ -46,6 +43,12 @@ namespace RestApiNetDemo.DAL.Repositories
         public Department GetById(int id)
         {
             Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
+            return department;
+        }
+
+        public List<Department> Search(string search)
+        {
+            var department = _dbEntities.Departments.Where(s => s.Name.Contains(search)).ToList();
             return department;
         }
 

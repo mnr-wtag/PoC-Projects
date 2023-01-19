@@ -52,16 +52,16 @@
     <Compile Include="Department\CreateDepartmentDTO.cs" />
     <Compile Include="Department\DepartmentDetailsDTO.cs" />
     <Compile Include="Department\DepartmentDTO.cs" />
-    <Compile Include="EmailAddress\CreateEmailAddress.cs" />
-    <Compile Include="EmailAddress\EmailAddress.cs" />
-    <Compile Include="Enrollment\Enrollment.cs" />
-    <Compile Include="MobileNumber\CreateMobileNumber.cs" />
-    <Compile Include="MobileNumber\MobileNumber.cs" />
+    <Compile Include="EmailAddress\CreateEmailAddressDTO.cs" />
+    <Compile Include="EmailAddress\EmailAddressDTO.cs" />
+    <Compile Include="Enrollment\EnrollmentDTO.cs" />
+    <Compile Include="MobileNumber\CreateMobileNumberDTO.cs" />
+    <Compile Include="MobileNumber\MobileNumberDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Student\CreateStudent.cs" />
-    <Compile Include="Student\Student.cs" />
-    <Compile Include="Teacher\CreateTeacher.cs" />
-    <Compile Include="Teacher\Teacher.cs" />
+    <Compile Include="Student\CreateStudentDTO.cs" />
+    <Compile Include="Student\StudentDTO.cs" />
+    <Compile Include="Teacher\CreateTeacherDTO.cs" />
+    <Compile Include="Teacher\TeacherDTO.cs" />
     <Compile Include="UserProfile\CreateUserProfile.cs" />
     <Compile Include="UserProfile\UserProfile.cs" />
   </ItemGroup>

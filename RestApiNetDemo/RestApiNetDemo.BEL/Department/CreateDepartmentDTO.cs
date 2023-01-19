@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
-namespace RestApiNetDemo.BEL.Entities.Department
+namespace RestApiNetDemo.BEL.Department
 {
     public class CreateDepartmentDTO
     {

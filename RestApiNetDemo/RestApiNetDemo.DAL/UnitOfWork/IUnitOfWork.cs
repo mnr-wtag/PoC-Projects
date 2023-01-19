@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 
 namespace RestApiNetDemo.DAL.UnitOfWork
 {
-    public interface IUnitOfWork<out TContext> where TContext : DbContext,new()
+    public interface IUnitOfWork<out TContext> where TContext : DbContext, new()
     {
         TContext Context { get; }
         void Save();

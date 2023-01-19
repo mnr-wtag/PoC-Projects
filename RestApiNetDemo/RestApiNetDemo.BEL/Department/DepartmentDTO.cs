@@ -1,6 +1,6 @@
-﻿namespace RestApiNetDemo.BEL.Entities.Department
+﻿namespace RestApiNetDemo.BEL.Department
 {
-    public class DepartmentDTO:CreateDepartmentDTO
+    public class DepartmentDTO : CreateDepartmentDTO
     {
         public int Id { get; set; }
     }

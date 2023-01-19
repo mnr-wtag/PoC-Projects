@@ -109,6 +109,7 @@
     <Compile Include="Repositories\EnrollmentRepo.cs" />
     <Compile Include="Repositories\StudentRepo.cs" />
     <Compile Include="Repositories\TeacherRepo.cs" />
+    <Compile Include="UnitOfWork\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Data\UMSModel.edmx">

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
-namespace RestApiNetDemo.BEL.Entities.Course
+namespace RestApiNetDemo.BEL.Course
 {
     public class CreateCourseDTO
     {

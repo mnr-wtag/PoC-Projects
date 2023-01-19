@@ -15,10 +15,10 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
     {
         readonly Mock<IRepository<Cours, int>> mockRepository = new Mock<IRepository<Cours, int>>();
         private readonly CourseRepo courseRepo;
-        public CourseRepoTests()
-        {
-            courseRepo = new CourseRepo(mockRepository.Object);
-        }
+        //public CourseRepoTests()
+        //{
+        //    courseRepo = new CourseRepo(mockRepository.Object);
+        //}
 
         private TestContext testContextInstance;
 

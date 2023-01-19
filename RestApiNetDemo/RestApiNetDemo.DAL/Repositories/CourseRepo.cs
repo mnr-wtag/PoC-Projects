@@ -16,9 +16,9 @@ namespace RestApiNetDemo.DAL.Repositories
             _dbEntities = new DotNetMvcDbEntities();
         }
 
-        public CourseRepo(IRepository<Cours, int> repo)
+        public CourseRepo(DotNetMvcDbEntities dbEntities)
         {
-            _repo = repo;
+            _dbEntities = dbEntities;
         }
 
         public bool Add(Cours entity)
@@ -39,7 +39,7 @@ namespace RestApiNetDemo.DAL.Repositories
 
         public List<Cours> GetAll()
         {
-            List<Cours> courseList = _dbEntities.Courses.ToList();
+            var courseList = _dbEntities.Courses.ToList();
             return courseList;
         }
 
