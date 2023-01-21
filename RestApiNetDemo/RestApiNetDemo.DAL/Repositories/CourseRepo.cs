@@ -6,9 +6,16 @@ using System.Linq;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    internal class CourseRepo : IRepository<Cours, int>
+    public class CourseRepo : IRepository<Cours, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
+        private readonly IRepository<Cours, int> _repo;
+
+        public CourseRepo()
+        {
+            _dbEntities = new DotNetMvcDbEntities();
+        }
+
         public CourseRepo(DotNetMvcDbEntities dbEntities)
         {
             _dbEntities = dbEntities;
@@ -32,7 +39,7 @@ namespace RestApiNetDemo.DAL.Repositories
 
         public List<Cours> GetAll()
         {
-            List<Cours> courseList = _dbEntities.Courses.ToList();
+            var courseList = _dbEntities.Courses.ToList();
             return courseList;
         }
 

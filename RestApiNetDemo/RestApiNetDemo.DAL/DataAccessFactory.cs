@@ -4,7 +4,7 @@ using RestApiNetDemo.DAL.Repositories;
 
 namespace RestApiNetDemo.DAL
 {
-    internal class DataAccessFactory
+    public class DataAccessFactory
     {
         private static readonly DotNetMvcDbEntities _dbEntities = new DotNetMvcDbEntities();
 
@@ -23,6 +23,10 @@ namespace RestApiNetDemo.DAL
         public static IRepository<Cours, int> CourseDataAccess()
         {
             return new CourseRepo(_dbEntities);
+        }
+        public static IRepository<Department, int, string> DepartmentDataAccess()
+        {
+            return new DepartmentRepo(_dbEntities);
         }
     }
 }
