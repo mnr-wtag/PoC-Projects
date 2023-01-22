@@ -1,15 +1,23 @@
 ﻿using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
     public class CourseRepo : IRepository<Cours, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
+        private IDbSet<Cours> _entities;
+        private readonly string _errorMessage = string.Empty;
 
+        public DotNetMvcDbEntities Context { get; set; }
+        public virtual IQueryable<Cours> Table => Entities;
+
+        protected virtual IDbSet<Cours> Entities => _entities ?? (_entities = Context.Set<Cours>());
         public CourseRepo()
         {
             _dbEntities = new DotNetMvcDbEntities();
@@ -54,7 +62,7 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public List<Cours> GetAll()
+        public List<Cours> GetAll(Expression<Func<Cours, bool>> expression = null, Func<IQueryable<Cours>, IOrderedQueryable<Cours>> orderBy = null, List<string> includes = null)
         {
             try
             {
@@ -69,12 +77,24 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public Cours GetById(int id)
+
+
+        public Cours GetById(Expression<Func<Cours, bool>> expression, List<string> includes = null)
         {
             try
             {
-                Cours course = _dbEntities.Courses.FirstOrDefault(s => s.Id == id);
-                return course;
+                IQueryable<Cours> query = Table;
+                if (expression != null)
+                {
+                    query = query.Where(expression);
+                }
+                if (includes != null)
+                {
+                    query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                }
+
+                var data = query.FirstOrDefault();
+                return data;
             }
             catch (System.Exception)
             {
@@ -83,6 +103,7 @@ namespace RestApiNetDemo.DAL.Repositories
             }
 
         }
+
 
         public bool Update(Cours entity)
         {

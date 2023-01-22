@@ -1,14 +1,23 @@
 ﻿using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    internal class StudentRepo : IRepository<Student, int>
+    public class StudentRepo : IRepository<Student, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
+        private IDbSet<Student> _entities;
+        private readonly string _errorMessage = string.Empty;
+
+        public DotNetMvcDbEntities Context { get; set; }
+        public virtual IQueryable<Student> Table => Entities;
+
+        protected virtual IDbSet<Student> Entities => _entities ?? (_entities = Context.Set<Student>());
         public StudentRepo(DotNetMvcDbEntities dbEntities)
         {
             _dbEntities = dbEntities;
@@ -48,7 +57,7 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public List<Student> GetAll()
+        public List<Student> GetAll(Expression<Func<Student, bool>> expression = null, Func<IQueryable<Student>, IOrderedQueryable<Student>> orderBy = null, List<string> includes = null)
         {
             try
             {
@@ -63,12 +72,22 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public Student GetById(int id)
+        public Student GetById(Expression<Func<Student, bool>> expression, List<string> includes = null)
         {
             try
             {
-                Student student = _dbEntities.Students.FirstOrDefault(s => s.Id == id);
-                return student;
+                IQueryable<Student> query = Table;
+                if (expression != null)
+                {
+                    query = query.Where(expression);
+                }
+                if (includes != null)
+                {
+                    query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                }
+
+                var data = query.FirstOrDefault();
+                return data;
             }
             catch (System.Exception)
             {
@@ -76,6 +95,11 @@ namespace RestApiNetDemo.DAL.Repositories
                 throw;
             }
 
+        }
+
+        public Student GetById(List<string> includes = null)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Update(Student entity)

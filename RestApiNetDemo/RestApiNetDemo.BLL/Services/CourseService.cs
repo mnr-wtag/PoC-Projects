@@ -42,7 +42,7 @@ namespace RestApiNetDemo.BLL.Services
 
         public CourseDetailsDTO GetCourseById(int id)
         {
-            var course = _repository.GetById(id);
+            var course = _repository.GetById(x => x.Id == id);
             if (course == null) return null;
 
             var courseView = new CourseDetailsDTO();
@@ -89,7 +89,7 @@ namespace RestApiNetDemo.BLL.Services
         public bool UpdateCourse(CourseDTO viewModel)
         {
             if (viewModel == null) return false;
-            var model = _repository.GetById(viewModel.Id);
+            var model = _repository.GetById(x=>x.Id==viewModel.Id);
             if (model == null) return false;
             model.Name = viewModel.Name;
             model.Credit = viewModel.Credit;
@@ -104,7 +104,7 @@ namespace RestApiNetDemo.BLL.Services
 
         public bool DeleteCourse(int id)
         {
-            var course = _repository.GetById( id);
+            var course = _repository.GetById( x => x.Id == id);
 
             if (course == null) return false;
             _repository.Delete(id);

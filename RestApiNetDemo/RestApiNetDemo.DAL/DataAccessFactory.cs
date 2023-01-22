@@ -24,9 +24,19 @@ namespace RestApiNetDemo.DAL
         {
             return new CourseRepo(_dbEntities);
         }
-        public static IRepository<Department, int, string> DepartmentDataAccess()
+        public static IRepository<Department, int> DepartmentDataAccess()
         {
             return new DepartmentRepo(_dbEntities);
+        }
+
+        public static IBulkInsert<Enrollment> EnrollmentDataAccess()
+        {
+            return new EnrollmentRepo();
+        }
+
+        public static IRepository<AuthUser, int> AuthUserDataAccess()
+        {
+            return new AuthRepo();
         }
     }
 }

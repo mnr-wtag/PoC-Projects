@@ -10,9 +10,9 @@ namespace RestApiNetDemo.BLL.Services
 {
     public class DepartmentService
     {
-        private readonly IRepository<Department, int, string> _repo;
+        private readonly IRepository<Department, int> _repo;
 
-        public DepartmentService(IRepository<Department, int, string> repo)
+        public DepartmentService(IRepository<Department, int> repo)
         {
             _repo = repo;
         }
@@ -46,7 +46,7 @@ namespace RestApiNetDemo.BLL.Services
 
         public DepartmentDTO GetDepartmentById(int id)
         {
-            Department department = _repo.GetById(id);
+            Department department = _repo.GetById(x => x.Id == id);
 
             if (department == null) return null;
 
@@ -112,7 +112,7 @@ namespace RestApiNetDemo.BLL.Services
         public bool UpdateDepartment(DepartmentDTO viewModel)
         {
             if (viewModel == null) return false;
-            Department model = _repo.GetById(viewModel.Id);
+            Department model = _repo.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Name = viewModel.Name;
             model.Description = viewModel.Description;
@@ -126,7 +126,7 @@ namespace RestApiNetDemo.BLL.Services
 
         public bool DeleteDepartment(int id)
         {
-            Department department = _repo.GetById(id);
+            Department department = _repo.GetById(x => x.Id == id);
 
             if (department == null) return false;
             var result = _repo.Delete(id);

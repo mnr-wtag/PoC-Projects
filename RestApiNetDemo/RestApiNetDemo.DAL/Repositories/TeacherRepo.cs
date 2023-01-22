@@ -1,14 +1,23 @@
 ﻿using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    internal class TeacherRepo : IRepository<Teacher, int>
+    public class TeacherRepo : IRepository<Teacher, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
+        private IDbSet<Teacher> _entities;
+        private readonly string _errorMessage = string.Empty;
+
+        public DotNetMvcDbEntities Context { get; set; }
+        public virtual IQueryable<Teacher> Table => Entities;
+
+        protected virtual IDbSet<Teacher> Entities => _entities ?? (_entities = Context.Set<Teacher>());
         public TeacherRepo(DotNetMvcDbEntities dbEntities)
         {
             _dbEntities = dbEntities;
@@ -48,27 +57,38 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public List<Teacher> GetAll()
+        public List<Teacher> GetAll(Expression<Func<Teacher, bool>> expression = null, Func<IQueryable<Teacher>, IOrderedQueryable<Teacher>> orderBy = null, List<string> includes = null)
         {
             try
             {
-                List<Teacher> teacherList = _dbEntities.Teachers.ToList();
+                var teacherList = _dbEntities.Teachers.ToList();
                 return teacherList;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
-
                 throw;
             }
 
         }
 
-        public Teacher GetById(int id)
+
+
+        public Teacher GetById(Expression<Func<Teacher, bool>> expression, List<string> includes = null)
         {
             try
             {
-                Teacher teacher = _dbEntities.Teachers.FirstOrDefault(s => s.Id == id);
-                return teacher;
+                IQueryable<Teacher> query = Table;
+                if (expression != null)
+                {
+                    query = query.Where(expression);
+                }
+                if (includes != null)
+                {
+                    query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                }
+
+                var data = query.FirstOrDefault();
+                return data;
             }
             catch (System.Exception)
             {
@@ -77,6 +97,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
 
         }
+
+
 
         public bool Update(Teacher entity)
         {

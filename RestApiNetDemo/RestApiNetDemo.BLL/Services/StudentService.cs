@@ -1,54 +1,69 @@
 ﻿using RestApiNetDemo.DAL.Data;
-using RestApiNetDemo.DAL.UnitOfWork;
 using System.Collections.Generic;
 using System;
 using RestApiNetDemo.BEL.Student;
 using RestApiNetDemo.DAL.IRepositories;
 using RestApiNetDemo.DAL;
+using RestApiNetDemo.BLL.Helpers;
+using System.Web;
 
 namespace RestApiNetDemo.BLL.Services
 {
     public class StudentService
     {
-        private readonly IRepository<Student, int> _repo;
+        private readonly IRepository<Student, int> _studentRepo;
+        private readonly IRepository<AuthUser, int> _authRepo;
+        private readonly IRepository<Enrollment,int> _enrollmentRepo;
         public StudentService()
         {
-            _repo = DataAccessFactory.StudentDataAccess();
-          
+            _studentRepo = DataAccessFactory.StudentDataAccess();
+            _authRepo= DataAccessFactory.AuthUserDataAccess();
+            _enrollmentRepo = DataAccessFactory.EnrollmentDataAccess();
         }
 
-        public StudentService(IRepository<Student, int> repo)
+        public StudentService(IRepository<Student, int> studentRepo, IRepository<AuthUser, int> authRepo, IRepository<Enrollment, int> enrollmentRepo)
         {
-            _repo = repo;
+            _studentRepo = studentRepo;
+            _authRepo = authRepo;
+            _enrollmentRepo = enrollmentRepo;
+
         }
 
         public IEnumerable<StudentDTO> GetStudentList()
         {
-
-            IEnumerable<Student> students = _repo.GetAll();
-            List<StudentDTO> studentsViewList = new List<StudentDTO>();
-
-            foreach (Student student in students)
+            try
             {
-                StudentDTO studentView = new StudentDTO();
+                var students = _studentRepo.GetAll();
+                List<StudentDTO> studentsViewList = new List<StudentDTO>();
 
-                studentView.FirstName = student.FirstName;
-                studentView.MiddleName = student.MiddleName;
-                studentView.LastName = student.LastName;
-                studentView.StudentCardNumber = student.StudentCardNumber;
-                studentView.EnrollmentDate = student.EnrollmentDate;
-                studentView.DepartmentId = student.DepartmentId;
-                studentView.Id = student.Id;
-                studentView.DepartmentName = student.Department.Name;
-                studentsViewList.Add(studentView);
+                foreach (Student student in students)
+                {
+                    StudentDTO studentView = new StudentDTO();
+
+                    studentView.FirstName = student.FirstName;
+                    studentView.MiddleName = student.MiddleName;
+                    studentView.LastName = student.LastName;
+                    studentView.StudentCardNumber = student.StudentCardNumber;
+                    studentView.EnrollmentDate = student.EnrollmentDate;
+                    studentView.DepartmentId = student.DepartmentId;
+                    studentView.Id = student.Id;
+                    studentView.DepartmentName = student.Department.Name;
+                    studentsViewList.Add(studentView);
+                }
+
+                return studentsViewList;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            return studentsViewList;
         }
 
-        public StudentDetailsDTO GetStudentById(int? id)
+        public StudentDetailsDTO GetStudentById(int id)
         {
-            Student student = _repo.GetById(x => x.Id == id);
+            Student student = _studentRepo.GetById(x => x.Id == id);
 
             if (student == null) return null;
 
@@ -71,7 +86,7 @@ namespace RestApiNetDemo.BLL.Services
         public List<StudentDTO> GetStudentsByName(string name)
         {
 
-            IEnumerable<Student> students = _repo.GetAll(x => x.FirstName.Contains(name) || x.LastName.Contains(name));
+            IEnumerable<Student> students = _studentRepo.GetAll(x => x.FirstName.Contains(name) || x.LastName.Contains(name));
 
             if (students == null) return null;
 
@@ -100,7 +115,7 @@ namespace RestApiNetDemo.BLL.Services
                     return response;
                 }
 
-                IEnumerable<Student> existingStudents = _repo.GetAll(x => x.StudentCardNumber == viewModel.StudentCardNumber);
+                IEnumerable<Student> existingStudents = _studentRepo.GetAll(x => x.StudentCardNumber == viewModel.StudentCardNumber);
                 if (existingStudents != null)
                 {
                     response.Response = Response.Exists;
@@ -120,22 +135,22 @@ namespace RestApiNetDemo.BLL.Services
                 studentModel.CreatedBy = 1;
                 studentModel.UpdatedBy = 1;
 
-                List<System.Web.Mvc.SelectListItem> appliedCourses = viewModel.CourseList.ToList();
+                var appliedCourses = viewModel.CourseList;
 
-                foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
+                foreach (var auth in appliedCourses)
                 {
-                    if (Convert.ToInt32(course.Value) != viewModel.DepartmentId)
+                    if (Convert.ToInt32(auth.DepartmentId) != viewModel.DepartmentId)
                     {
                         response.Response = Response.Error;
-                        response.Message = "This course is not applicable with the selected department";
+                        response.Message = "This auth is not applicable with the selected department";
                         return response;
                     }
                 }
                 List<Enrollment> enrollmentList = new List<Enrollment>();
-                foreach (System.Web.Mvc.SelectListItem course in appliedCourses)
+                foreach (var auth in appliedCourses)
                 {
                     Enrollment enrollmentModel = new Enrollment();
-                    enrollmentModel.CourseId = Convert.ToInt32(course.Value);
+                    enrollmentModel.CourseId = Convert.ToInt32(auth.Id);
                     enrollmentModel.StudentId = studentModel.Id;
                     enrollmentModel.CourseEnrollDate = DateTime.Now;
                     enrollmentModel.CreatedAt = DateTime.Now;
@@ -157,14 +172,11 @@ namespace RestApiNetDemo.BLL.Services
                 authUser.UpdatedBy = 1;
 
 
-                _unitOfWork.CreateTransaction();
 
-                _repo.Insert(studentModel);
-                _enrollmentRepository.BulkInsert(enrollments);
-                _authRepository.Insert(authUser);
+                _studentRepo.Add(studentModel);
+                _enrollmentRepo.BulkInsert(enrollments);
+                _authRepo.Add(authUser);
 
-                _unitOfWork.Save();
-                _unitOfWork.Commit();
 
                 response.Response = Response.Success;
                 response.Message = "Student added successfully";
@@ -173,7 +185,7 @@ namespace RestApiNetDemo.BLL.Services
             catch (Exception)
             {
                 //Log the exception and rollback the transaction
-                _unitOfWork.Rollback();
+
                 throw;
             }
         }
@@ -181,7 +193,7 @@ namespace RestApiNetDemo.BLL.Services
         public bool UpdateDepartment(StudentDTO viewModel)
         {
             if (viewModel == null) return false;
-            Student model = _repo.GetById(x => x.Id == viewModel.Id);
+            Student model = _studentRepo.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Id = viewModel.Id;
             model.FirstName = viewModel.FirstName;
@@ -192,19 +204,17 @@ namespace RestApiNetDemo.BLL.Services
             model.UpdatedAt = DateTime.Now;
             model.UpdatedBy = 1;
 
-            _repo.Update(model);
-            _unitOfWork.Save();
-            return true;
+            var result = _studentRepo.Update(model);
+            return result;
         }
 
 
-        public bool DeleteStudent(int? id)
+        public bool DeleteStudent(int id)
         {
-            Student model = _repo.GetById(x => x.Id == id);
+            Student model = _studentRepo.GetById(x => x.Id == id);
             if (model == null) return false;
-            _repo.Delete(model);
-            _unitOfWork.Save();
-            return true;
+            var result = _studentRepo.Delete(id);
+            return result;
 
         }
     }

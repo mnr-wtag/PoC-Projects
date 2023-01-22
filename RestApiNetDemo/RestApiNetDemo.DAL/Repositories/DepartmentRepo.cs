@@ -1,22 +1,32 @@
 ﻿using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    internal class DepartmentRepo : IRepository<Department, int, string>
+    public class DepartmentRepo : IRepository<Department, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
+        private IDbSet<Department> _entities;
+        private readonly string _errorMessage = string.Empty;
 
+        public DotNetMvcDbEntities Context { get; set; }
+        public virtual IQueryable<Department> Table => Entities;
+
+        protected virtual IDbSet<Department> Entities => _entities ?? (_entities = Context.Set<Department>());
+        public DepartmentRepo()
+        {
+            _dbEntities = new DotNetMvcDbEntities();
+        }
 
         public DepartmentRepo(DotNetMvcDbEntities dbEntities)
         {
             _dbEntities = dbEntities;
         }
-
-
 
         public bool Add(Department entity)
         {
@@ -38,9 +48,9 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             try
             {
-                Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
-                if (department == null) return false;
-                _dbEntities.Departments.Remove(department);
+                Department course = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
+                if (course == null) return false;
+                _dbEntities.Departments.Remove(course);
                 int result = _dbEntities.SaveChanges();
                 return result != 0;
             }
@@ -52,12 +62,12 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public List<Department> GetAll()
+        public List<Department> GetAll(Expression<Func<Department, bool>> expression = null, Func<IQueryable<Department>, IOrderedQueryable<Department>> orderBy = null, List<string> includes = null)
         {
             try
             {
-                List<Department> departmentList = _dbEntities.Departments.ToList();
-                return departmentList;
+                var courseList = _dbEntities.Departments.ToList();
+                return courseList;
             }
             catch (System.Exception)
             {
@@ -67,12 +77,24 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public Department GetById(int id)
+
+
+        public Department GetById(Expression<Func<Department, bool>> expression, List<string> includes = null)
         {
             try
             {
-                Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
-                return department;
+                IQueryable<Department> query = Table;
+                if (expression != null)
+                {
+                    query = query.Where(expression);
+                }
+                if (includes != null)
+                {
+                    query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                }
+
+                var data = query.FirstOrDefault();
+                return data;
             }
             catch (System.Exception)
             {
@@ -82,20 +104,6 @@ namespace RestApiNetDemo.DAL.Repositories
 
         }
 
-        public List<Department> Search(string search)
-        {
-            try
-            {
-                var department = _dbEntities.Departments.Where(s => s.Name.Contains(search)).ToList();
-                return department;
-            }
-            catch (System.Exception)
-            {
-
-                throw;
-            }
-
-        }
 
         public bool Update(Department entity)
         {
@@ -110,6 +118,7 @@ namespace RestApiNetDemo.DAL.Repositories
 
                 throw;
             }
+
 
         }
     }

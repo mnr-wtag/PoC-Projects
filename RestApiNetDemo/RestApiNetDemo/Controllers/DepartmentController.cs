@@ -20,9 +20,9 @@ namespace RestApiNetDemo.Controllers
                 var data = service.GetDepartmentList();
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Console.WriteLine(ex.Message);
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Not found");
             }
         }
@@ -39,7 +39,7 @@ namespace RestApiNetDemo.Controllers
             }
             catch (Exception)
             {
-                throw;
+               
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Not found");
             }
         }
