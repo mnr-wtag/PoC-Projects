@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RestApiNetDemo.BEL.AuditableEntities;
+using System.ComponentModel.DataAnnotations;
 
 namespace RestApiNetDemo.BEL.Course
 {
-    public class CreateCourseDTO
+    public class CreateCourseDTO : DateAndAuthorDTO
     {
         [Required]
         [Display(Name = "Course Name")]

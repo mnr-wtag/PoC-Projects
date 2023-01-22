@@ -20,43 +20,97 @@ namespace RestApiNetDemo.DAL.Repositories
 
         public bool Add(Department entity)
         {
-            _dbEntities.Departments.Add(entity);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Departments.Add(entity);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Delete(int id)
         {
-            Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
-            if (department == null) return false;
-            _dbEntities.Departments.Remove(department);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
+                if (department == null) return false;
+                _dbEntities.Departments.Remove(department);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public List<Department> GetAll()
         {
-            List<Department> departmentList = _dbEntities.Departments.ToList();
-            return departmentList;
+            try
+            {
+                List<Department> departmentList = _dbEntities.Departments.ToList();
+                return departmentList;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public Department GetById(int id)
         {
-            Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
-            return department;
+            try
+            {
+                Department department = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
+                return department;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public List<Department> Search(string search)
         {
-            var department = _dbEntities.Departments.Where(s => s.Name.Contains(search)).ToList();
-            return department;
+            try
+            {
+                var department = _dbEntities.Departments.Where(s => s.Name.Contains(search)).ToList();
+                return department;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Update(Department entity)
         {
-            _dbEntities.Entry(entity).State = EntityState.Modified;
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Entry(entity).State = EntityState.Modified;
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

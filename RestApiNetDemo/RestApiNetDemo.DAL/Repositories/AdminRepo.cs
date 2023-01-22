@@ -16,37 +16,82 @@ namespace RestApiNetDemo.DAL.Repositories
 
         public bool Add(Admin entity)
         {
-            _dbEntities.Admins.Add(entity);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Admins.Add(entity);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Delete(int id)
         {
-            Admin admin = _dbEntities.Admins.FirstOrDefault(s => s.Id == id);
-            if (admin == null) return false;
-            _dbEntities.Admins.Remove(admin);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                Admin admin = _dbEntities.Admins.FirstOrDefault(s => s.Id == id);
+                if (admin == null) return false;
+                _dbEntities.Admins.Remove(admin);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public List<Admin> GetAll()
         {
-            List<Admin> adminList = _dbEntities.Admins.ToList();
-            return adminList;
+            try
+            {
+                List<Admin> adminList = _dbEntities.Admins.ToList();
+                return adminList;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public Admin GetById(int id)
         {
-            Admin admin = _dbEntities.Admins.FirstOrDefault(s => s.Id == id);
-            return admin;
+            try
+            {
+                Admin admin = _dbEntities.Admins.FirstOrDefault(s => s.Id == id);
+                return admin;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Update(Admin entity)
         {
-            _dbEntities.Entry(entity).State = EntityState.Modified;
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Entry(entity).State = EntityState.Modified;
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

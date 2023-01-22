@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RestApiNetDemo.BEL.AuditableEntities;
+using System.ComponentModel.DataAnnotations;
 
 namespace RestApiNetDemo.BEL.Department
 {
-    public class CreateDepartmentDTO
+    public class CreateDepartmentDTO : DateAndAuthorDTO
     {
+        public CreateDepartmentDTO() : base() { }
+
+
         [Required]
         [StringLength(50)]
         [Display(Name = "Department Name")]
