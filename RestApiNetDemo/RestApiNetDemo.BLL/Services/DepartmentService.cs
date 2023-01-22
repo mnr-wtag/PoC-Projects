@@ -1,4 +1,5 @@
 ﻿using RestApiNetDemo.BEL.Department;
+using RestApiNetDemo.BEL.Employee.Teacher;
 using RestApiNetDemo.DAL;
 using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
@@ -57,7 +58,7 @@ namespace RestApiNetDemo.BLL.Services
             };
 
             var departmentTeachers = department.Teachers;
-            if (departmentTeachers != null) departmentView.DepartmentTeachers = (ICollection<BEL.Teacher.TeacherDTO>)departmentTeachers;
+            if (departmentTeachers != null) departmentView.DepartmentTeachers = (ICollection<TeacherDTO>)departmentTeachers;
 
             return departmentView;
 

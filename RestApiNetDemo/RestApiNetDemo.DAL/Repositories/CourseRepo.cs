@@ -9,7 +9,6 @@ namespace RestApiNetDemo.DAL.Repositories
     public class CourseRepo : IRepository<Cours, int>
     {
         private readonly DotNetMvcDbEntities _dbEntities;
-        private readonly IRepository<Cours, int> _repo;
 
         public CourseRepo()
         {
@@ -23,37 +22,83 @@ namespace RestApiNetDemo.DAL.Repositories
 
         public bool Add(Cours entity)
         {
-            _dbEntities.Courses.Add(entity);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Courses.Add(entity);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Delete(int id)
         {
-            Cours course = _dbEntities.Courses.FirstOrDefault(s => s.Id == id);
-            if (course == null) return false;
-            _dbEntities.Courses.Remove(course);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                Cours course = _dbEntities.Courses.FirstOrDefault(s => s.Id == id);
+                if (course == null) return false;
+                _dbEntities.Courses.Remove(course);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public List<Cours> GetAll()
         {
-            var courseList = _dbEntities.Courses.ToList();
-            return courseList;
+            try
+            {
+                var courseList = _dbEntities.Courses.ToList();
+                return courseList;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public Cours GetById(int id)
         {
-            Cours course = _dbEntities.Courses.FirstOrDefault(s => s.Id == id);
-            return course;
+            try
+            {
+                Cours course = _dbEntities.Courses.FirstOrDefault(s => s.Id == id);
+                return course;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Update(Cours entity)
         {
-            _dbEntities.Entry(entity).State = EntityState.Modified;
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Entry(entity).State = EntityState.Modified;
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
+
         }
     }
 }

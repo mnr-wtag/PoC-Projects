@@ -16,37 +16,82 @@ namespace RestApiNetDemo.DAL.Repositories
 
         public bool Add(Student entity)
         {
-            _dbEntities.Students.Add(entity);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Students.Add(entity);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Delete(int id)
         {
-            Student student = _dbEntities.Students.FirstOrDefault(s => s.Id == id);
-            if (student == null) return false;
-            _dbEntities.Students.Remove(student);
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                Student student = _dbEntities.Students.FirstOrDefault(s => s.Id == id);
+                if (student == null) return false;
+                _dbEntities.Students.Remove(student);
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public List<Student> GetAll()
         {
-            List<Student> studentList = _dbEntities.Students.ToList();
-            return studentList;
+            try
+            {
+                List<Student> studentList = _dbEntities.Students.ToList();
+                return studentList;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public Student GetById(int id)
         {
-            Student student = _dbEntities.Students.FirstOrDefault(s => s.Id == id);
-            return student;
+            try
+            {
+                Student student = _dbEntities.Students.FirstOrDefault(s => s.Id == id);
+                return student;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public bool Update(Student entity)
         {
-            _dbEntities.Entry(entity).State = EntityState.Modified;
-            int result = _dbEntities.SaveChanges();
-            return result != 0;
+            try
+            {
+                _dbEntities.Entry(entity).State = EntityState.Modified;
+                int result = _dbEntities.SaveChanges();
+                return result != 0;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }
