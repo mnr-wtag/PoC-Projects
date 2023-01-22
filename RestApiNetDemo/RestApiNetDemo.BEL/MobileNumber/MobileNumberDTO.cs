@@ -1,6 +1,6 @@
 ﻿namespace RestApiNetDemo.BEL.MobileNumber
 {
-    public class MobileNumberDTO
+    public class MobileNumberDTO : CreateMobileNumberDTO
     {
     }
 }

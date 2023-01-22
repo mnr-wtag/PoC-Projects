@@ -1,6 +1,6 @@
 ﻿namespace RestApiNetDemo.BEL.EmailAddress
 {
-    public class EmailAddressDTO
+    public class EmailAddressDTO : CreateEmailAddressDTO
     {
     }
 }
