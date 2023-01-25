@@ -1,5 +1,7 @@
 ﻿using RestApiNetDemo.BEL.Department;
 using RestApiNetDemo.BEL.Employee.Teacher;
+using RestApiNetDemo.BLL.Helpers;
+using RestApiNetDemo.BLL.IServices;
 using RestApiNetDemo.DAL;
 using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
@@ -8,7 +10,7 @@ using System.Collections.Generic;
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class DepartmentService
+    public class DepartmentService : IDepartmentService
     {
         private readonly IRepository<Department, int> _repo;
 
@@ -131,6 +133,31 @@ namespace RestApiNetDemo.BLL.Services
             if (department == null) return false;
             var result = _repo.Delete(id);
             return result;
+        }
+
+        ServiceResponse IDepartmentService.GetDepartmentList()
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IDepartmentService.GetDepartmentById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IDepartmentService.AddNewDepartment(CreateDepartmentDTO viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IDepartmentService.UpdateDepartment(DepartmentDTO viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IDepartmentService.DeleteDepartment(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -60,7 +60,7 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
             //Arrange
             var mockData = new List<Cours> { new Cours { Id = 1, Name = "Data Structure" } };
 
-            mockRepository.Setup(r => r.GetAll()).Returns(mockData);
+            mockRepository.Setup(r => r.GetAll(null, null, null)).Returns(mockData);
 
             //Act
             var actualData = courseRepo.GetAll();
@@ -77,10 +77,10 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
             var testId = 1;
             var testResult = new Cours { Id = 1, Name = "Data Structure" };
 
-            mockRepository.Setup(r => r.GetById(testId)).Returns(testResult);
+            mockRepository.Setup(r => r.GetById(x => x.Id == testId, null)).Returns(testResult);
 
             //Act
-            var actualData = courseRepo.GetById(1);
+            var actualData = courseRepo.GetById(x=>x.Id==testId,null);
             var expectedData = new Cours { Id = 1, Name = "Data Structure" };
 
             //Assert

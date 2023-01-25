@@ -1,27 +1,27 @@
-﻿using RestApiNetDemo.DAL.Data;
-using System.Collections.Generic;
-using System;
-using RestApiNetDemo.BEL.Student;
-using RestApiNetDemo.DAL.IRepositories;
-using RestApiNetDemo.DAL;
+﻿using RestApiNetDemo.BEL.Student;
 using RestApiNetDemo.BLL.Helpers;
-using System.Web;
+using RestApiNetDemo.BLL.IServices;
+using RestApiNetDemo.DAL;
+using RestApiNetDemo.DAL.Data;
+using RestApiNetDemo.DAL.IRepositories;
+using System;
+using System.Collections.Generic;
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class StudentService
+    public class StudentService:IStudentService
     {
         private readonly IRepository<Student, int> _studentRepo;
         private readonly IRepository<AuthUser, int> _authRepo;
-        private readonly IRepository<Enrollment,int> _enrollmentRepo;
+        private readonly IBulkInsert<Enrollment> _enrollmentRepo;
         public StudentService()
         {
             _studentRepo = DataAccessFactory.StudentDataAccess();
-            _authRepo= DataAccessFactory.AuthUserDataAccess();
-            _enrollmentRepo = DataAccessFactory.EnrollmentDataAccess();
+            _authRepo = DataAccessFactory.AuthUserDataAccess();
+            //_enrollmentRepo = DataAccessFactory.EnrollmentDataAccess();
         }
 
-        public StudentService(IRepository<Student, int> studentRepo, IRepository<AuthUser, int> authRepo, IRepository<Enrollment, int> enrollmentRepo)
+        public StudentService(IRepository<Student, int> studentRepo, IRepository<AuthUser, int> authRepo, IBulkInsert<Enrollment> enrollmentRepo)
         {
             _studentRepo = studentRepo;
             _authRepo = authRepo;
@@ -216,6 +216,31 @@ namespace RestApiNetDemo.BLL.Services
             var result = _studentRepo.Delete(id);
             return result;
 
+        }
+
+        ServiceResponse IStudentService.GetStudentList()
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IStudentService.GetStudentById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IStudentService.GetStudentsByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IStudentService.UpdateDepartment(StudentDTO viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse IStudentService.DeleteStudent(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,0 +1,8 @@
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\obj\Debug\testingUsing.csproj.AssemblyReference.cache
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\obj\Debug\testingUsing.csproj.SuggestedBindingRedirects.cache
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\obj\Debug\testingUsing.csproj.CoreCompileInputs.cache
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\bin\Debug\testingUsing.exe.config
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\bin\Debug\testingUsing.exe
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\bin\Debug\testingUsing.pdb
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\obj\Debug\testingUsing.exe
+C:\Users\Welldev\source\repos\PoC Projects\testingUsing\testingUsing\obj\Debug\testingUsing.pdb

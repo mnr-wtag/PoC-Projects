@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class TeacherRepo : IRepository<Teacher, int>
+    public class TeacherRepo : IRepository<Teacher, int>, IDisposable
     {
-        private readonly DotNetMvcDbEntities _dbEntities;
+        private DotNetMvcDbEntities _dbEntities;
         private IDbSet<Teacher> _entities;
         private readonly string _errorMessage = string.Empty;
 
@@ -23,6 +23,11 @@ namespace RestApiNetDemo.DAL.Repositories
             _dbEntities = dbEntities;
         }
 
+        public TeacherRepo()
+        {
+            _dbEntities = new DotNetMvcDbEntities();
+        }
+
         public bool Add(Teacher entity)
         {
             try
@@ -31,7 +36,7 @@ namespace RestApiNetDemo.DAL.Repositories
                 int result = _dbEntities.SaveChanges();
                 return result != 0;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -49,7 +54,7 @@ namespace RestApiNetDemo.DAL.Repositories
                 int result = _dbEntities.SaveChanges();
                 return result != 0;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -90,7 +95,7 @@ namespace RestApiNetDemo.DAL.Repositories
                 var data = query.FirstOrDefault();
                 return data;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -108,12 +113,30 @@ namespace RestApiNetDemo.DAL.Repositories
                 int result = _dbEntities.SaveChanges();
                 return result != 0;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
             }
 
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_dbEntities != null)
+                {
+                    _dbEntities.Dispose();
+                    _dbEntities = null;
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

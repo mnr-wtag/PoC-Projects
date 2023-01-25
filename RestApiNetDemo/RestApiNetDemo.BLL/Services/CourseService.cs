@@ -1,4 +1,6 @@
 ﻿using RestApiNetDemo.BEL.Course;
+using RestApiNetDemo.BLL.Helpers;
+using RestApiNetDemo.BLL.IServices;
 using RestApiNetDemo.DAL;
 using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
@@ -7,9 +9,10 @@ using System.Collections.Generic;
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class CourseService
+    public class CourseService:ICourseService
     {
         private readonly IRepository<Cours, int> _repository;
+
 
         public CourseService(IRepository<Cours, int> repo)
         {
@@ -21,7 +24,7 @@ namespace RestApiNetDemo.BLL.Services
             _repository = DataAccessFactory.CourseDataAccess();
         }
 
-        public  IEnumerable<CourseDTO> GetCourseList()
+        public IEnumerable<CourseDTO> GetCourseList()
         {
 
             var courses = _repository.GetAll();
@@ -70,18 +73,18 @@ namespace RestApiNetDemo.BLL.Services
                 course.CreatedBy = 1;
                 course.UpdatedBy = 1;
 
-                
+
 
                 _repository.Add(course);
-               
 
-               
+
+
                 return true;
             }
             catch (Exception)
             {
                 //Log the exception and rollback the transaction
-               
+
                 throw;
             }
         }
@@ -89,7 +92,7 @@ namespace RestApiNetDemo.BLL.Services
         public bool UpdateCourse(CourseDTO viewModel)
         {
             if (viewModel == null) return false;
-            var model = _repository.GetById(x=>x.Id==viewModel.Id);
+            var model = _repository.GetById(x => x.Id == viewModel.Id);
             if (model == null) return false;
             model.Name = viewModel.Name;
             model.Credit = viewModel.Credit;
@@ -104,11 +107,36 @@ namespace RestApiNetDemo.BLL.Services
 
         public bool DeleteCourse(int id)
         {
-            var course = _repository.GetById( x => x.Id == id);
+            var course = _repository.GetById(x => x.Id == id);
 
             if (course == null) return false;
             _repository.Delete(id);
             return true;
+        }
+
+        ServiceResponse ICourseService.GetCourseList()
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse ICourseService.GetCourseById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse ICourseService.AddNewCourse(CreateCourseDTO viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse ICourseService.UpdateCourse(CourseDTO viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        ServiceResponse ICourseService.DeleteCourse(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

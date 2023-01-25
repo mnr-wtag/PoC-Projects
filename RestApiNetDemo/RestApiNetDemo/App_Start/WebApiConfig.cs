@@ -1,8 +1,5 @@
-﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+﻿using RestApiNetDemo.IoC;
+using Serilog;
 using System.Web.Http;
 
 namespace RestApiNetDemo
@@ -17,8 +14,17 @@ namespace RestApiNetDemo
                             .File("logs.txt")
                             .CreateLogger();
 
+
+
+
             // Web API routes
             config.MapHttpAttributeRoutes();
+            config.Filters.Add(new AuthorizeAttribute());
+
+            config.DependencyResolver = new NinjectResolver();
+            
+
+            // config.DependencyResolver = new IocRegistrations(IServiceCollection services, string configLocation);
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

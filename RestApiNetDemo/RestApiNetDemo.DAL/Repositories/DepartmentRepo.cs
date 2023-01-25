@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class DepartmentRepo : IRepository<Department, int>
+    public class DepartmentRepo : IRepository<Department, int>, IDisposable
     {
-        private readonly DotNetMvcDbEntities _dbEntities;
+        private DotNetMvcDbEntities _dbEntities;
         private IDbSet<Department> _entities;
         private readonly string _errorMessage = string.Empty;
 
@@ -32,11 +32,16 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             try
             {
-                _dbEntities.Departments.Add(entity);
-                int result = _dbEntities.SaveChanges();
-                return result != 0;
+                using (_dbEntities)
+                {
+                    _dbEntities.Departments.Add(entity);
+                    int result = _dbEntities.SaveChanges();
+                    return result != 0;
+                }
+
+
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -48,13 +53,17 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             try
             {
-                Department course = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
-                if (course == null) return false;
-                _dbEntities.Departments.Remove(course);
-                int result = _dbEntities.SaveChanges();
-                return result != 0;
+                using (_dbEntities)
+                {
+                    Department course = _dbEntities.Departments.FirstOrDefault(s => s.Id == id);
+                    if (course == null) return false;
+                    _dbEntities.Departments.Remove(course);
+                    int result = _dbEntities.SaveChanges();
+                    return result != 0;
+                }
+
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -66,10 +75,14 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             try
             {
-                var courseList = _dbEntities.Departments.ToList();
-                return courseList;
+                using (_dbEntities)
+                {
+                    var courseList = _dbEntities.Departments.ToList();
+                    return courseList;
+                }
+
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -83,20 +96,24 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             try
             {
-                IQueryable<Department> query = Table;
-                if (expression != null)
+                using (_dbEntities)
                 {
-                    query = query.Where(expression);
-                }
-                if (includes != null)
-                {
-                    query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                    IQueryable<Department> query = Table;
+                    if (expression != null)
+                    {
+                        query = query.Where(expression);
+                    }
+                    if (includes != null)
+                    {
+                        query = includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                    }
+
+                    var data = query.FirstOrDefault();
+                    return data;
                 }
 
-                var data = query.FirstOrDefault();
-                return data;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
@@ -109,17 +126,39 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             try
             {
-                _dbEntities.Entry(entity).State = EntityState.Modified;
-                int result = _dbEntities.SaveChanges();
-                return result != 0;
+                using (_dbEntities)
+                {
+                    _dbEntities.Entry(entity).State = EntityState.Modified;
+                    int result = _dbEntities.SaveChanges();
+                    return result != 0;
+                }
+
             }
-            catch (System.Exception)
+            catch (Exception)
             {
 
                 throw;
             }
 
 
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_dbEntities != null)
+                {
+                    _dbEntities.Dispose();
+                    _dbEntities = null;
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

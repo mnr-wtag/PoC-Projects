@@ -7,8 +7,15 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class EnrollmentRepo : IBulkInsert<Enrollment>
+    public class EnrollmentRepo : IBulkInsert<Enrollment>,IRepository<Enrollment,int>,IDisposable
     {
+        private DotNetMvcDbEntities _dbEntities;
+
+        public EnrollmentRepo()
+        {
+            _dbEntities= new DotNetMvcDbEntities();
+        }
+
         public bool Add(Enrollment entity)
         {
             throw new NotImplementedException();
@@ -39,6 +46,24 @@ namespace RestApiNetDemo.DAL.Repositories
         public bool Update(Enrollment entity)
         {
             throw new NotImplementedException();
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_dbEntities != null)
+                {
+                    _dbEntities.Dispose();
+                    _dbEntities = null;
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

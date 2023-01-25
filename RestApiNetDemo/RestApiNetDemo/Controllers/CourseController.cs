@@ -1,4 +1,5 @@
-﻿using RestApiNetDemo.BLL.Services;
+﻿using RestApiNetDemo.BLL.IServices;
+using RestApiNetDemo.BLL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +11,25 @@ namespace RestApiNetDemo.Controllers
 {
     public class CourseController : ApiController
     {
+        private readonly ICourseService _courseService;
+
+        public CourseController(ICourseService courseService)
+        {
+            _courseService = courseService;
+        }
+
         [Route("api/courses")]
         [HttpGet]
         public HttpResponseMessage GetCourses()
         {
 			try
 			{
-                var service = new CourseService();
-                var data = service.GetCourseList();
+                var data = _courseService.GetCourseList();
                 return Request.CreateResponse(HttpStatusCode.OK, data);
 			}
 			catch (Exception)
 			{
-                throw;
+               // throw;
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Not found");
             }
         }
