@@ -1,4 +1,5 @@
-﻿using RestApiNetDemo.BLL.Services;
+﻿using RestApiNetDemo.BLL.IServices;
+using RestApiNetDemo.BLL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,20 @@ namespace RestApiNetDemo.Controllers
 {
     public class DepartmentController : ApiController
     {
+        private readonly IDepartmentService _departmentService;
+
+        public DepartmentController(IDepartmentService departmentService)
+        {
+            _departmentService = departmentService;
+        }
+
         [Route("api/departments")]
         [HttpGet]
         public HttpResponseMessage GetDepartments()
         {
             try
             {
-                var service = new DepartmentService();
-                var data = service.GetDepartmentList();
+                var data = _departmentService.GetDepartmentList();
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception ex)
@@ -33,8 +40,7 @@ namespace RestApiNetDemo.Controllers
         {
             try
             {
-                var service = new DepartmentService();
-                var data = service.GetDepartmentById(id);
+                var data = _departmentService.GetDepartmentById(id);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception)

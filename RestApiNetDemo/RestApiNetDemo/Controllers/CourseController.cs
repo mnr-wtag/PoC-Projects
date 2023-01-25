@@ -20,7 +20,7 @@ namespace RestApiNetDemo.Controllers
 
         [Route("api/courses")]
         [HttpGet]
-        public HttpResponseMessage GetCourses()
+        public HttpResponseMessage GetCourses() 
         {
 			try
 			{

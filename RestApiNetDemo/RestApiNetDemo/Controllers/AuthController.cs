@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestApiNetDemo.BLL.IServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,11 @@ namespace RestApiNetDemo.Controllers
 {
     public class AuthController : ApiController
     {
+        private readonly IAuthUserService _authUserService;
 
+        public AuthController(IAuthUserService authUserService)
+        {
+            _authUserService = authUserService;
+        }
     }
 }
