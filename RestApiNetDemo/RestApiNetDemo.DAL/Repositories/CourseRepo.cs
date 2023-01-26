@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class CourseRepo : IRepository<Cours, int>,IDisposable
+    public class CourseRepo : IRepository<Cours, int>, IDisposable
     {
-        private  DotNetMvcDbEntities _dbEntities;
+        private DotNetMvcDbEntities _dbEntities;
         private IDbSet<Cours> _entities;
         private readonly string _errorMessage = string.Empty;
 
@@ -18,6 +18,7 @@ namespace RestApiNetDemo.DAL.Repositories
         public virtual IQueryable<Cours> Table => Entities;
 
         protected virtual IDbSet<Cours> Entities => _entities ?? (_entities = Context.Set<Cours>());
+
         public CourseRepo()
         {
             _dbEntities = new DotNetMvcDbEntities();
@@ -38,10 +39,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public bool Delete(int id)
@@ -56,10 +55,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public List<Cours> GetAll(Expression<Func<Cours, bool>> expression = null, Func<IQueryable<Cours>, IOrderedQueryable<Cours>> orderBy = null, List<string> includes = null)
@@ -71,13 +68,9 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
-
 
         public Cours GetById(Expression<Func<Cours, bool>> expression, List<string> includes = null)
         {
@@ -98,12 +91,9 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
 
         public bool Update(Cours entity)
         {
@@ -115,11 +105,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-
         }
 
         protected void Dispose(bool disposing)

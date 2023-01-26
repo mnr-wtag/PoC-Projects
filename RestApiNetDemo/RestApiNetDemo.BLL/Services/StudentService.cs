@@ -4,21 +4,26 @@ using RestApiNetDemo.BLL.IServices;
 using RestApiNetDemo.DAL;
 using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class StudentService:IStudentService
+    public class StudentService : IStudentService
     {
         private readonly IRepository<Student, int> _studentRepo;
         private readonly IRepository<AuthUser, int> _authRepo;
         private readonly IBulkInsert<Enrollment> _enrollmentRepo;
+
         public StudentService()
         {
             _studentRepo = DataAccessFactory.StudentDataAccess();
             _authRepo = DataAccessFactory.AuthUserDataAccess();
-            //_enrollmentRepo = DataAccessFactory.EnrollmentDataAccess();
+            _enrollmentRepo = DataAccessFactory.EnrollmentDataAccess();
         }
 
         public StudentService(IRepository<Student, int> studentRepo, IRepository<AuthUser, int> authRepo, IBulkInsert<Enrollment> enrollmentRepo)
@@ -26,15 +31,18 @@ namespace RestApiNetDemo.BLL.Services
             _studentRepo = studentRepo;
             _authRepo = authRepo;
             _enrollmentRepo = enrollmentRepo;
-
         }
 
-        public IEnumerable<StudentDTO> GetStudentList()
+        public ServiceResponse GetStudentList()
         {
             try
             {
                 var students = _studentRepo.GetAll();
-                List<StudentDTO> studentsViewList = new List<StudentDTO>();
+                if (students == null)
+                {
+                    return new ServiceResponse(HttpStatusCode.NotFound, "No student was found");
+                }
+                List<StudentDTO> studentsListView = new List<StudentDTO>();
 
                 foreach (Student student in students)
                 {
@@ -48,47 +56,55 @@ namespace RestApiNetDemo.BLL.Services
                     studentView.DepartmentId = student.DepartmentId;
                     studentView.Id = student.Id;
                     studentView.DepartmentName = student.Department.Name;
-                    studentsViewList.Add(studentView);
+                    studentsListView.Add(studentView);
                 }
 
-                return studentsViewList;
+                return new ServiceResponse(HttpStatusCode.OK, "", studentsListView);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error($"{DateTime.UtcNow} - Class:{nameof(StudentService)} - Method:{nameof(GetStudentList)} --- Exception:{ex}");
+                var _response = new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
+                return _response;
+            }
+        }
 
-                throw;
+        public ServiceResponse GetStudentById(int id)
+        {
+            try
+            {
+                if (id <= 0) return new ServiceResponse(HttpStatusCode.BadRequest, "Invalid request");
+                Student student = _studentRepo.GetById(x => x.Id == id);
+
+                if (student == null) return new ServiceResponse(HttpStatusCode.NotFound, "Student not found");
+
+                StudentDetailsDTO studentDetailsView = new StudentDetailsDTO
+                {
+                    Id = student.Id,
+                    FirstName = student.FirstName,
+                    MiddleName = student.MiddleName,
+                    LastName = student.LastName,
+                    DepartmentId = student.DepartmentId,
+                    DepartmentName = student.Department.Name,
+                    StudentCardNumber = student.StudentCardNumber,
+                    EnrollmentDate = student.EnrollmentDate,
+                };
+
+                return new ServiceResponse(HttpStatusCode.OK, "", studentDetailsView);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{DateTime.UtcNow}  --- Class: {nameof(StudentService)}  --- Method: {nameof(GetStudentById)}  --- Exception:{ex}");
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
             }
 
         }
 
-        public StudentDetailsDTO GetStudentById(int id)
+        public ServiceResponse GetStudentsByName(string name)
         {
-            Student student = _studentRepo.GetById(x => x.Id == id);
-
-            if (student == null) return null;
-
-            StudentDetailsDTO studentDetailsView = new StudentDetailsDTO
-            {
-                Id = student.Id,
-                FirstName = student.FirstName,
-                MiddleName = student.MiddleName,
-                LastName = student.LastName,
-                DepartmentId = student.DepartmentId,
-                DepartmentName = student.Department.Name,
-                StudentCardNumber = student.StudentCardNumber,
-                EnrollmentDate = student.EnrollmentDate,
-
-            };
-
-            return studentDetailsView;
-        }
-
-        public List<StudentDTO> GetStudentsByName(string name)
-        {
-
-            IEnumerable<Student> students = _studentRepo.GetAll(x => x.FirstName.Contains(name) || x.LastName.Contains(name));
-
-            if (students == null) return null;
+            if (name == string.Empty) return new ServiceResponse(HttpStatusCode.BadRequest, "name cannot be empty");
+            IEnumerable<Student> students = _studentRepo.GetAll(x => x.FirstName.Contains(name) || x.MiddleName.Contains(name) || x.LastName.Contains(name));
+            if (students == null) return new ServiceResponse(HttpStatusCode.NotFound, "No student was found");
 
             List<StudentDTO> viewModelList = new List<StudentDTO>();
             foreach (Student student in students)
@@ -100,27 +116,23 @@ namespace RestApiNetDemo.BLL.Services
                 viewModelList.Add(viewModel);
             }
 
-            return viewModelList;
+            return new ServiceResponse(HttpStatusCode.OK, "", viewModelList);
         }
 
         public ServiceResponse AddNewStudent(CreateStudentDTO viewModel)
         {
             try
             {
-                ServiceResponse response = new ServiceResponse();
+
                 if (viewModel == null)
                 {
-                    response.Response = Response.NotFound;
-                    response.Message = "Input not found";
-                    return response;
+                    return new ServiceResponse(HttpStatusCode.NotFound, "Input not found");
                 }
 
                 IEnumerable<Student> existingStudents = _studentRepo.GetAll(x => x.StudentCardNumber == viewModel.StudentCardNumber);
                 if (existingStudents != null)
                 {
-                    response.Response = Response.Exists;
-                    response.Message = "Students with same ID already exists";
-                    return response;
+                    return new ServiceResponse(HttpStatusCode.Conflict, "Students with same ID already exists");
                 }
 
                 Student studentModel = new Student();
@@ -137,13 +149,12 @@ namespace RestApiNetDemo.BLL.Services
 
                 var appliedCourses = viewModel.CourseList;
 
-                foreach (var auth in appliedCourses)
+                foreach (var course in appliedCourses)
                 {
-                    if (Convert.ToInt32(auth.DepartmentId) != viewModel.DepartmentId)
+                    if (Convert.ToInt32(course.DepartmentId) != viewModel.DepartmentId)
                     {
-                        response.Response = Response.Error;
-                        response.Message = "This auth is not applicable with the selected department";
-                        return response;
+
+                        return new ServiceResponse(HttpStatusCode.BadRequest, "This course is not applicable with the selected department");
                     }
                 }
                 List<Enrollment> enrollmentList = new List<Enrollment>();
@@ -171,30 +182,31 @@ namespace RestApiNetDemo.BLL.Services
                 authUser.CreatedBy = 1;
                 authUser.UpdatedBy = 1;
 
-
-
-                _studentRepo.Add(studentModel);
-                _enrollmentRepo.BulkInsert(enrollments);
-                _authRepo.Add(authUser);
-
-
-                response.Response = Response.Success;
-                response.Message = "Student added successfully";
-                return response;
+                var studentResult = _studentRepo.Add(studentModel);
+                var enrollentResult = _enrollmentRepo.BulkInsert(enrollments);
+                var authResult = _authRepo.Add(authUser);
+                if (studentResult && enrollentResult && authResult)
+                {
+                    return new ServiceResponse(HttpStatusCode.Created, "Student added successfully");
+                }
+                else
+                {
+                    return new ServiceResponse(HttpStatusCode.Conflict, "Student create failed");
+                }
             }
             catch (Exception)
             {
                 //Log the exception and rollback the transaction
-
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong.");
                 throw;
             }
         }
 
-        public bool UpdateDepartment(StudentDTO viewModel)
+        public ServiceResponse UpdateDepartment(StudentDTO viewModel)
         {
-            if (viewModel == null) return false;
+            if (viewModel == null) return new ServiceResponse(HttpStatusCode.BadRequest, "Input is null");
             Student model = _studentRepo.GetById(x => x.Id == viewModel.Id);
-            if (model == null) return false;
+            if (model == null) return new ServiceResponse(HttpStatusCode.NotFound, "student not found");
             model.Id = viewModel.Id;
             model.FirstName = viewModel.FirstName;
             model.MiddleName = viewModel.MiddleName;
@@ -205,42 +217,32 @@ namespace RestApiNetDemo.BLL.Services
             model.UpdatedBy = 1;
 
             var result = _studentRepo.Update(model);
-            return result;
+            if (result)
+            {
+                return new ServiceResponse(HttpStatusCode.NoContent, "student updated successfully");
+            }
+            else
+            {
+                return new ServiceResponse(HttpStatusCode.BadRequest, "student update failed");
+            }
         }
 
-
-        public bool DeleteStudent(int id)
+        public ServiceResponse DeleteStudent(int id)
         {
             Student model = _studentRepo.GetById(x => x.Id == id);
-            if (model == null) return false;
+            if (model == null) return new ServiceResponse(HttpStatusCode.NotFound, "student not found");
             var result = _studentRepo.Delete(id);
-            return result;
+            if (result)
+            {
+                return new ServiceResponse(HttpStatusCode.NoContent,"student deleted successfully");
+            }
+            else
+            {
+                return new ServiceResponse(HttpStatusCode.BadRequest, "student delete failed");
+            }
 
         }
 
-        ServiceResponse IStudentService.GetStudentList()
-        {
-            throw new NotImplementedException();
-        }
 
-        ServiceResponse IStudentService.GetStudentById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IStudentService.GetStudentsByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IStudentService.UpdateDepartment(StudentDTO viewModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IStudentService.DeleteStudent(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

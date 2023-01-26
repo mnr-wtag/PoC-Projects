@@ -13,7 +13,7 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
     [TestClass]
     public class CourseRepoTests
     {
-        readonly Mock<IRepository<Cours, int>> mockRepository = new Mock<IRepository<Cours, int>>();
+        private readonly Mock<IRepository<Cours, int>> mockRepository = new Mock<IRepository<Cours, int>>();
         private readonly CourseRepo courseRepo;
         //public CourseRepoTests()
         //{
@@ -33,6 +33,7 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
         }
 
         #region Additional test attributes
+
         //
         // You can use the following additional attributes as you write your tests:
         //
@@ -44,7 +45,7 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
         // [ClassCleanup()]
         // public static void MyClassCleanup() { }
         //
-        // Use TestInitialize to run code before running each test 
+        // Use TestInitialize to run code before running each test
         // [TestInitialize()]
         // public void MyTestInitialize() { }
         //
@@ -52,7 +53,8 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
         // [TestCleanup()]
         // public void MyTestCleanup() { }
         //
-        #endregion
+
+        #endregion Additional test attributes
 
         [TestMethod]
         public void GetAll_ShouldReturnCourseList()
@@ -80,7 +82,7 @@ namespace RestApiNetDemo.Tests.DataAccessLayerTests.Repositories
             mockRepository.Setup(r => r.GetById(x => x.Id == testId, null)).Returns(testResult);
 
             //Act
-            var actualData = courseRepo.GetById(x=>x.Id==testId,null);
+            var actualData = courseRepo.GetById(x => x.Id == testId, null);
             var expectedData = new Cours { Id = 1, Name = "Data Structure" };
 
             //Assert

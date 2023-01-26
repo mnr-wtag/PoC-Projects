@@ -7,7 +7,7 @@ namespace RestApiNetDemo.Tests.BusinessLogicLayerTests.Services
 {
     internal class CourseServiceTests
     {
-        readonly Mock<IRepository<Cours, int>> Mock = new Mock<IRepository<Cours, int>>();
+        private readonly Mock<IRepository<Cours, int>> Mock = new Mock<IRepository<Cours, int>>();
         private readonly CourseService _courseService;
 
         public CourseServiceTests()

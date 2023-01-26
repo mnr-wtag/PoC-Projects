@@ -5,8 +5,9 @@ namespace RestApiNetDemo.BEL.Department
 {
     public class CreateDepartmentDTO : DateAndAuthorDTO
     {
-        public CreateDepartmentDTO() : base() { }
-
+        public CreateDepartmentDTO() : base()
+        {
+        }
 
         [Required]
         [StringLength(50)]

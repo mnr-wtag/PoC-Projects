@@ -8,8 +8,9 @@ namespace RestApiNetDemo.BEL.Student
 {
     public class CreateStudentDTO : DateAndAuthorDTO
     {
-        public CreateStudentDTO() : base() { }
-
+        public CreateStudentDTO() : base()
+        {
+        }
 
         [Required]
         [Display(Name = "First Name")]
@@ -21,7 +22,6 @@ namespace RestApiNetDemo.BEL.Student
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-
 
         [Display(Name = "Student ID Card No.")]
         [RegularExpression(@"^\d{2}-\d{5}-\d{1}$", ErrorMessage = "The student ID card pattern should be like this i.e. 18-39022-3")]

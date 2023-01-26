@@ -7,13 +7,13 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class EnrollmentRepo : IBulkInsert<Enrollment>,IRepository<Enrollment,int>,IDisposable
+    public class EnrollmentRepo : IBulkInsert<Enrollment>, IRepository<Enrollment, int>, IDisposable
     {
         private DotNetMvcDbEntities _dbEntities;
 
         public EnrollmentRepo()
         {
-            _dbEntities= new DotNetMvcDbEntities();
+            _dbEntities = new DotNetMvcDbEntities();
         }
 
         public bool Add(Enrollment entity)
@@ -40,8 +40,6 @@ namespace RestApiNetDemo.DAL.Repositories
         {
             throw new NotImplementedException();
         }
-
-
 
         public bool Update(Enrollment entity)
         {

@@ -1,14 +1,13 @@
-﻿using RestApiNetDemo.BLL.IServices;
-using RestApiNetDemo.BLL.Services;
+﻿using RestApiNetDemo.BEL.Department;
+using RestApiNetDemo.BLL.IServices;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
 namespace RestApiNetDemo.Controllers
 {
+    [RoutePrefix("api/department")]
     public class DepartmentController : ApiController
     {
         private readonly IDepartmentService _departmentService;
@@ -18,7 +17,6 @@ namespace RestApiNetDemo.Controllers
             _departmentService = departmentService;
         }
 
-        [Route("api/departments")]
         [HttpGet]
         public HttpResponseMessage GetDepartments()
         {
@@ -27,14 +25,13 @@ namespace RestApiNetDemo.Controllers
                 var data = _departmentService.GetDepartmentList();
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Not found");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong");
             }
         }
 
-        [Route("api/department/{id}")]
+        [Route("{id}")]
         [HttpGet]
         public HttpResponseMessage GetDepartmentById(int id)
         {
@@ -45,12 +42,22 @@ namespace RestApiNetDemo.Controllers
             }
             catch (Exception)
             {
-               
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Not found");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong");
             }
         }
 
-       
-
+        [HttpPost]
+        public HttpResponseMessage AddDepartment(CreateDepartmentDTO dto)
+        {
+            try
+            {
+                var response = _departmentService.AddNewDepartment(dto);
+                return Request.CreateResponse(response.StatusCode, response.Message);
+            }
+            catch (Exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong");
+            }
+        }
     }
 }

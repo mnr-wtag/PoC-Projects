@@ -4,7 +4,7 @@ using RestApiNetDemo.BLL.IServices;
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class AuthUserService:IAuthUserService
+    public class AuthUserService : IAuthUserService
     {
         public bool Login(string username, string password)
         {

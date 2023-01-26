@@ -8,16 +8,17 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class AdminRepo : IRepository<Admin, int>,IDisposable
+    public class AdminRepo : IRepository<Admin, int>, IDisposable
     {
-        private  DotNetMvcDbEntities _dbEntities;
+        private DotNetMvcDbEntities _dbEntities;
         private IDbSet<Admin> _entities;
-        private  string _errorMessage = string.Empty;
+        private readonly string _errorMessage = string.Empty;
 
         public DotNetMvcDbEntities Context { get; set; }
         public virtual IQueryable<Admin> Table => Entities;
 
         protected virtual IDbSet<Admin> Entities => _entities ?? (_entities = Context.Set<Admin>());
+
         public AdminRepo(DotNetMvcDbEntities dbEntities) => _dbEntities = dbEntities;
 
         public bool Add(Admin entity)
@@ -30,10 +31,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public bool Delete(int id)
@@ -48,10 +47,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public List<Admin> GetAll(Expression<Func<Admin, bool>> expression = null, Func<IQueryable<Admin>, IOrderedQueryable<Admin>> orderBy = null, List<string> includes = null)
@@ -63,12 +60,9 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
 
         public Admin GetById(Expression<Func<Admin, bool>> expression, List<string> includes = null)
         {
@@ -89,12 +83,9 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
 
         public bool Update(Admin entity)
         {
@@ -106,10 +97,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         protected void Dispose(bool disposing)

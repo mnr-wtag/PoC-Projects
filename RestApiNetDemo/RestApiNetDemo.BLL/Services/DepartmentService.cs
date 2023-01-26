@@ -5,8 +5,10 @@ using RestApiNetDemo.BLL.IServices;
 using RestApiNetDemo.DAL;
 using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace RestApiNetDemo.BLL.Services
 {
@@ -24,46 +26,60 @@ namespace RestApiNetDemo.BLL.Services
             _repo = DataAccessFactory.DepartmentDataAccess();
         }
 
-
-        public IEnumerable<DepartmentDTO> GetDepartmentList()
+        public ServiceResponse GetDepartmentList()
         {
-
-            IEnumerable<Department> departments = _repo.GetAll();
-            List<DepartmentDTO> departmentsViewList = new List<DepartmentDTO>();
-
-            foreach (Department department in departments)
+            try
             {
-                DepartmentDTO departmentView = new DepartmentDTO
+                IEnumerable<Department> departments = _repo.GetAll();
+                if (departments == null) return new ServiceResponse(HttpStatusCode.NotFound, "No department was found");
+                List<DepartmentDTO> departmentsViewList = new List<DepartmentDTO>();
+
+                foreach (Department department in departments)
+                {
+                    DepartmentDTO departmentView = new DepartmentDTO
+                    {
+                        Id = department.Id,
+                        Name = department.Name,
+                        Description = department.Description
+                    };
+
+                    departmentsViewList.Add(departmentView);
+                }
+
+                return new ServiceResponse(HttpStatusCode.OK, "", departmentsViewList);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{DateTime.UtcNow} - Class:{nameof(DepartmentService)} - Method:{nameof(GetDepartmentList)} --- Exception:{ex}");
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
+            }
+        }
+
+        public ServiceResponse GetDepartmentById(int id)
+        {
+            try
+            {
+                Department department = _repo.GetById(x => x.Id == id, new List<string> { "Teachers" });
+
+                if (department == null) return new ServiceResponse(HttpStatusCode.NotFound, "Department not found");
+
+                DepartmentDetailsDTO departmentView = new DepartmentDetailsDTO
                 {
                     Id = department.Id,
                     Name = department.Name,
                     Description = department.Description
                 };
 
-                departmentsViewList.Add(departmentView);
+                var departmentTeachers = department.Teachers;
+                if (departmentTeachers != null) departmentView.DepartmentTeachers = (ICollection<TeacherDTO>)departmentTeachers;
+
+                return new ServiceResponse(HttpStatusCode.OK, "", departmentView);
             }
-
-            return departmentsViewList;
-        }
-
-        public DepartmentDTO GetDepartmentById(int id)
-        {
-            Department department = _repo.GetById(x => x.Id == id);
-
-            if (department == null) return null;
-
-            DepartmentDetailsDTO departmentView = new DepartmentDetailsDTO
+            catch (Exception ex)
             {
-                Id = department.Id,
-                Name = department.Name,
-                Description = department.Description
-            };
-
-            var departmentTeachers = department.Teachers;
-            if (departmentTeachers != null) departmentView.DepartmentTeachers = (ICollection<TeacherDTO>)departmentTeachers;
-
-            return departmentView;
-
+                Log.Error($"{DateTime.UtcNow}  --- Class: {nameof(DepartmentService)}  --- Method: {nameof(GetDepartmentById)}  --- Exception:{ex}");
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
+            }
         }
 
         //public DepartmentDTO GetDepartmentByName(string name)
@@ -85,10 +101,11 @@ namespace RestApiNetDemo.BLL.Services
         //    }
         //}
 
-        public bool AddNewDepartment(CreateDepartmentDTO viewModel)
+        public ServiceResponse AddNewDepartment(CreateDepartmentDTO viewModel)
         {
             try
             {
+                if (viewModel == null) return new ServiceResponse(HttpStatusCode.BadRequest, "Department cannot be null");
                 Department department = new Department
                 {
                     Name = viewModel.Name,
@@ -100,64 +117,59 @@ namespace RestApiNetDemo.BLL.Services
                 };
 
                 var result = _repo.Add(department);
-
-                return result;
+                return result
+                    ? new ServiceResponse(HttpStatusCode.Created, $"Department created successfully")
+                    : new ServiceResponse(HttpStatusCode.BadRequest, "Department create failed");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Log the exception and rollback the transaction
-
-                throw;
+                Log.Error($"{DateTime.UtcNow} --- Class:{nameof(DepartmentService)}  --- Method: {nameof(AddNewDepartment)} --- Exception:{ex}");
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
             }
         }
 
-        public bool UpdateDepartment(DepartmentDTO viewModel)
+        public ServiceResponse UpdateDepartment(DepartmentDTO viewModel)
         {
-            if (viewModel == null) return false;
-            Department model = _repo.GetById(x => x.Id == viewModel.Id);
-            if (model == null) return false;
-            model.Name = viewModel.Name;
-            model.Description = viewModel.Description;
-            model.UpdatedAt = DateTime.Now;
-            model.UpdatedBy = 1;
+            try
+            {
+                if (viewModel == null) return new ServiceResponse(HttpStatusCode.BadRequest, "Department cannot be null");
+                Department model = _repo.GetById(x => x.Id == viewModel.Id);
+                if (model == null) return new ServiceResponse(HttpStatusCode.NotFound, "Department not found");
+                model.Name = viewModel.Name;
+                model.Description = viewModel.Description;
+                model.UpdatedAt = DateTime.Now;
+                model.UpdatedBy = 1;
 
-            var result = _repo.Update(model);
-            return result;
+                var result = _repo.Update(model);
+                return result
+                    ? new ServiceResponse(HttpStatusCode.NoContent, "Course updated successfully")
+                    : new ServiceResponse(HttpStatusCode.BadRequest, "Course update failed");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{DateTime.UtcNow} --- Class:{nameof(DepartmentService)} --- Method:{nameof(UpdateDepartment)} --- Exception:{ex}");
+                var _response = new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
+                return _response;
+            }
         }
 
-
-        public bool DeleteDepartment(int id)
+        public ServiceResponse DeleteDepartment(int id)
         {
-            Department department = _repo.GetById(x => x.Id == id);
+            try
+            {
+                Department department = _repo.GetById(x => x.Id == id);
 
-            if (department == null) return false;
-            var result = _repo.Delete(id);
-            return result;
-        }
-
-        ServiceResponse IDepartmentService.GetDepartmentList()
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IDepartmentService.GetDepartmentById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IDepartmentService.AddNewDepartment(CreateDepartmentDTO viewModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IDepartmentService.UpdateDepartment(DepartmentDTO viewModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        ServiceResponse IDepartmentService.DeleteDepartment(int id)
-        {
-            throw new NotImplementedException();
+                if (department == null) return new ServiceResponse(HttpStatusCode.NotFound, "Department not found");
+                var result = _repo.Delete(id);
+                return result
+                    ? new ServiceResponse(HttpStatusCode.NoContent, "Course deleted successfully")
+                    : new ServiceResponse(HttpStatusCode.BadRequest, "Course delete failed");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{DateTime.UtcNow} --- Class:{nameof(DepartmentService)} --- Method:{nameof(DeleteDepartment)} --- Exception:{ex}");
+                return new ServiceResponse(HttpStatusCode.InternalServerError, "Something went wrong");
+            }
         }
     }
 }

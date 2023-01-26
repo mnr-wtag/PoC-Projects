@@ -14,8 +14,10 @@ namespace RestApiNetDemo.BEL.AuditableEntities
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Updated At")]
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
         [Display(Name = "Created By")]
         public int? CreatedBy { get; set; }
+
         [Display(Name = "Updated By")]
         public int? UpdatedBy { get; set; }
     }

@@ -5,7 +5,9 @@ namespace RestApiNetDemo.BEL.Entities.UserProfile
 {
     public class CreateUserProfileDTO : DateAndAuthorDTO
     {
-        public CreateUserProfileDTO() : base() { }
+        public CreateUserProfileDTO() : base()
+        {
+        }
 
         public byte[] UserPhoto { get; set; }
 
@@ -16,6 +18,7 @@ namespace RestApiNetDemo.BEL.Entities.UserProfile
         [EmailAddress]
         [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Incorrect Email Format")]
         public string EmailAddress { get; set; }
+
         [Phone]
         public string MobileNumber { get; set; }
     }

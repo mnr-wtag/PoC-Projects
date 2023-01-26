@@ -2,7 +2,7 @@
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class TeacherService:ITeacherService
+    public class TeacherService : ITeacherService
     {
     }
 }

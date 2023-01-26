@@ -2,7 +2,7 @@
 
 namespace RestApiNetDemo.Controllers
 {
-    public class HomeController : ApiController
+    public class AdminController : ApiController
     {
     }
 }

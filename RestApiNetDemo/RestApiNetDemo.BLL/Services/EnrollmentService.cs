@@ -2,7 +2,7 @@
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class EnrollmentService:IEnrollmentService
+    public class EnrollmentService : IEnrollmentService
     {
     }
 }

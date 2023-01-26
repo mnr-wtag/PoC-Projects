@@ -14,15 +14,11 @@ namespace RestApiNetDemo
                             .File("logs.txt")
                             .CreateLogger();
 
-
-
-
             // Web API routes
             config.MapHttpAttributeRoutes();
             config.Filters.Add(new AuthorizeAttribute());
 
             config.DependencyResolver = new NinjectResolver();
-            
 
             // config.DependencyResolver = new IocRegistrations(IServiceCollection services, string configLocation);
 

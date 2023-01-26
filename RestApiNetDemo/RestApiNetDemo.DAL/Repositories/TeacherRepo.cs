@@ -18,6 +18,7 @@ namespace RestApiNetDemo.DAL.Repositories
         public virtual IQueryable<Teacher> Table => Entities;
 
         protected virtual IDbSet<Teacher> Entities => _entities ?? (_entities = Context.Set<Teacher>());
+
         public TeacherRepo(DotNetMvcDbEntities dbEntities)
         {
             _dbEntities = dbEntities;
@@ -38,10 +39,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public bool Delete(int id)
@@ -56,10 +55,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public List<Teacher> GetAll(Expression<Func<Teacher, bool>> expression = null, Func<IQueryable<Teacher>, IOrderedQueryable<Teacher>> orderBy = null, List<string> includes = null)
@@ -73,10 +70,7 @@ namespace RestApiNetDemo.DAL.Repositories
             {
                 throw;
             }
-
         }
-
-
 
         public Teacher GetById(Expression<Func<Teacher, bool>> expression, List<string> includes = null)
         {
@@ -97,13 +91,9 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
-
 
         public bool Update(Teacher entity)
         {
@@ -115,10 +105,8 @@ namespace RestApiNetDemo.DAL.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         protected void Dispose(bool disposing)

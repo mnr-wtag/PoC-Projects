@@ -18,6 +18,7 @@ namespace RestApiNetDemo.DAL.Repositories
         public virtual IQueryable<Department> Table => Entities;
 
         protected virtual IDbSet<Department> Entities => _entities ?? (_entities = Context.Set<Department>());
+
         public DepartmentRepo()
         {
             _dbEntities = new DotNetMvcDbEntities();
@@ -38,15 +39,11 @@ namespace RestApiNetDemo.DAL.Repositories
                     int result = _dbEntities.SaveChanges();
                     return result != 0;
                 }
-
-
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public bool Delete(int id)
@@ -61,14 +58,11 @@ namespace RestApiNetDemo.DAL.Repositories
                     int result = _dbEntities.SaveChanges();
                     return result != 0;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
 
         public List<Department> GetAll(Expression<Func<Department, bool>> expression = null, Func<IQueryable<Department>, IOrderedQueryable<Department>> orderBy = null, List<string> includes = null)
@@ -80,17 +74,12 @@ namespace RestApiNetDemo.DAL.Repositories
                     var courseList = _dbEntities.Departments.ToList();
                     return courseList;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
-
 
         public Department GetById(Expression<Func<Department, bool>> expression, List<string> includes = null)
         {
@@ -111,16 +100,12 @@ namespace RestApiNetDemo.DAL.Repositories
                     var data = query.FirstOrDefault();
                     return data;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
 
         public bool Update(Department entity)
         {
@@ -132,15 +117,11 @@ namespace RestApiNetDemo.DAL.Repositories
                     int result = _dbEntities.SaveChanges();
                     return result != 0;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-
         }
 
         protected void Dispose(bool disposing)

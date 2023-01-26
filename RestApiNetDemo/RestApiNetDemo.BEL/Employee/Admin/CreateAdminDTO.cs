@@ -2,7 +2,9 @@
 {
     public class CreateAdminDTO : EmployeeDTO
     {
-        public CreateAdminDTO() : base() { }
+        public CreateAdminDTO() : base()
+        {
+        }
 
         public string AdminCardNumber { get; set; }
     }

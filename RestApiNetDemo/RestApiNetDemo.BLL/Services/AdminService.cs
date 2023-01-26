@@ -2,8 +2,7 @@
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class AdminService:IAdminService
+    public class AdminService : IAdminService
     {
-
     }
 }

@@ -2,7 +2,7 @@
 
 namespace RestApiNetDemo.BLL.Services
 {
-    public class UserProfileService:IUserProfileService
+    public class UserProfileService : IUserProfileService
     {
     }
 }

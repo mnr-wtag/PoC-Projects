@@ -1,18 +1,16 @@
-﻿using Ninject.Extensions.ChildKernel;
-using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http.Dependencies;
+﻿using Ninject;
+using Ninject.Extensions.ChildKernel;
 using RestApiNetDemo.BLL.IServices;
 using RestApiNetDemo.BLL.Services;
+using System;
+using System.Collections.Generic;
+using System.Web.Http.Dependencies;
 
 namespace RestApiNetDemo.IoC
 {
-    public class NinjectResolver:IDependencyResolver
+    public class NinjectResolver : IDependencyResolver
     {
-        private IKernel kernel;
+        private readonly IKernel kernel;
 
         public NinjectResolver() : this(new StandardKernel())
         {
@@ -44,16 +42,11 @@ namespace RestApiNetDemo.IoC
 
         public void Dispose()
         {
-
         }
 
         private void AddBindings(IKernel kernel)
         {
             // singleton and transient bindings go here
-        }
-
-        private IKernel AddRequestBindings(IKernel kernel)
-        {
             kernel.Bind<IAdminService>().To<AdminService>().InSingletonScope();
             kernel.Bind<IAuthUserService>().To<AuthUserService>().InSingletonScope();
             kernel.Bind<ICourseService>().To<CourseService>().InSingletonScope();
@@ -62,7 +55,12 @@ namespace RestApiNetDemo.IoC
             kernel.Bind<IStudentService>().To<StudentService>().InSingletonScope();
             kernel.Bind<ITeacherService>().To<TeacherService>().InSingletonScope();
             kernel.Bind<IUserProfileService>().To<UserProfileService>().InSingletonScope();
-            
+        }
+
+        private IKernel AddRequestBindings(IKernel kernel)
+        {
+            AddBindings(kernel);
+
             return kernel;
         }
     }

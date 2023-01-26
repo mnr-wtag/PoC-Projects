@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RestApiNetDemo.DAL.Data;
+﻿using RestApiNetDemo.DAL.Data;
 using RestApiNetDemo.DAL.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -8,13 +7,13 @@ using System.Linq.Expressions;
 
 namespace RestApiNetDemo.DAL.Repositories
 {
-    public class AuthRepo : IRepository<AuthUser, int>,IDisposable
+    public class AuthRepo : IRepository<AuthUser, int>, IDisposable
     {
         private DotNetMvcDbEntities _dbEntities;
 
         public AuthRepo()
         {
-            _dbEntities= new DotNetMvcDbEntities();
+            _dbEntities = new DotNetMvcDbEntities();
         }
 
         public bool Add(AuthUser entity)
