@@ -103,13 +103,10 @@ namespace RestApiNetDemo.DAL.Repositories
 
         protected void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && _dbEntities != null)
             {
-                if (_dbEntities != null)
-                {
-                    _dbEntities.Dispose();
-                    _dbEntities = null;
-                }
+                _dbEntities.Dispose();
+                _dbEntities = null;
             }
         }
 
